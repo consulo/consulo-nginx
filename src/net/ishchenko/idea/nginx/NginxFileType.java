@@ -16,8 +16,6 @@
 
 package net.ishchenko.idea.nginx;
 
-import javax.swing.*;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;

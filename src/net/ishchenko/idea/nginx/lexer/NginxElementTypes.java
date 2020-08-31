@@ -21,6 +21,7 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+
 import net.ishchenko.idea.nginx.NginxLanguage;
 
 /**
