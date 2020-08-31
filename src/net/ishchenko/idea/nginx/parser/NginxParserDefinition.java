@@ -16,6 +16,8 @@
 
 package net.ishchenko.idea.nginx.parser;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LanguageUtil;
@@ -29,10 +31,17 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
 import net.ishchenko.idea.nginx.lexer.NginxParsingLexer;
-import net.ishchenko.idea.nginx.psi.impl.*;
-import org.jetbrains.annotations.NotNull;
+import net.ishchenko.idea.nginx.psi.impl.NginxComplexValueImpl;
+import net.ishchenko.idea.nginx.psi.impl.NginxContextImpl;
+import net.ishchenko.idea.nginx.psi.impl.NginxDirectiveImpl;
+import net.ishchenko.idea.nginx.psi.impl.NginxDirectiveNameImpl;
+import net.ishchenko.idea.nginx.psi.impl.NginxDirectiveValueImpl;
+import net.ishchenko.idea.nginx.psi.impl.NginxInnerVariableImpl;
+import net.ishchenko.idea.nginx.psi.impl.NginxLuaContextImpl;
+import net.ishchenko.idea.nginx.psi.impl.NginxPsiFileImpl;
 
 /**
  * Created by IntelliJ IDEA.

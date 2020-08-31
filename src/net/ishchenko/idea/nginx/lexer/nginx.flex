@@ -25,10 +25,13 @@ ValueStart = [^{};\n\r \t\f#$'\"]
 LineComment = {WhiteSpace}* "\#" (.* | {LineTerminator})
 
 %state DIRECTIVE_VALUE
+//%state TEMPLATE_VARIABLE
+//%state TEMPLATE_VARIABLE_DIRECTIVE
 
 %%
 
 <YYINITIAL> {
+    "${"[^}]+"}"                               {return NginxElementTypes.TEMPLATE_VARIABLE; }
     {SpecialDirectives}                        {yybegin(DIRECTIVE_VALUE); return NginxElementTypes.CONTEXT_NAME; }
     {LuaDirectives}                            {yybegin(DIRECTIVE_VALUE); return NginxElementTypes.LUA_CONTEXT; }
     [^{};\n\r \t\f'#]+                         {yybegin(DIRECTIVE_VALUE); return NginxElementTypes.DIRECTIVE_NAME; }
@@ -36,7 +39,8 @@ LineComment = {WhiteSpace}* "\#" (.* | {LineTerminator})
 }
 
 <DIRECTIVE_VALUE> {
-    "$" [_a-z]*              {return NginxElementTypes.INNER_VARIABLE;}
+    "${"[^}]+"}"                               {return NginxElementTypes.TEMPLATE_VARIABLE; }
+    "$" [_a-z]*                                {return NginxElementTypes.INNER_VARIABLE;}
     {ValueStart}+("$"[^_a-z])?     {
                                                 //the idea is to distinguish:
                                                 // 1) asd$ as value "asd$"

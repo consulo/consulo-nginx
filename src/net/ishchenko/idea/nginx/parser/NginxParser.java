@@ -16,14 +16,16 @@
 
 package net.ishchenko.idea.nginx.parser;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.tree.IElementType;
+
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -109,11 +111,12 @@ public class NginxParser implements PsiParser {
         while (builder.getTokenType() == NginxElementTypes.DIRECTIVE_VALUE ||
                 builder.getTokenType() == NginxElementTypes.DIRECTIVE_STRING_VALUE ||
                 builder.getTokenType() == NginxElementTypes.INNER_VARIABLE ||
-                builder.getTokenType() == NginxElementTypes.VALUE_WHITE_SPACE) {
+                builder.getTokenType() == NginxElementTypes.VALUE_WHITE_SPACE ||
+                builder.getTokenType() == NginxElementTypes.TEMPLATE_VARIABLE) {
             if (builder.eof()) {
                 return true;
             }
-            if (builder.getTokenType() == NginxElementTypes.DIRECTIVE_VALUE || builder.getTokenType() == NginxElementTypes.INNER_VARIABLE) {
+            if (builder.getTokenType() == NginxElementTypes.DIRECTIVE_VALUE || builder.getTokenType() == NginxElementTypes.INNER_VARIABLE || builder.getTokenType() == NginxElementTypes.TEMPLATE_VARIABLE) {
                 PsiBuilder.Marker valueMarker = builder.mark();
                 //returns true on eof
                 if (parseDirectiveValue(builder)) {
@@ -136,7 +139,7 @@ public class NginxParser implements PsiParser {
     }
 
     private boolean parseDirectiveValue(PsiBuilder builder) {
-        while (builder.getTokenType() == NginxElementTypes.DIRECTIVE_VALUE || builder.getTokenType() == NginxElementTypes.INNER_VARIABLE) {
+        while (builder.getTokenType() == NginxElementTypes.DIRECTIVE_VALUE || builder.getTokenType() == NginxElementTypes.INNER_VARIABLE || builder.getTokenType() == NginxElementTypes.TEMPLATE_VARIABLE) {
             if (builder.eof()) {
                 return true;
             }

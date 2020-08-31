@@ -16,14 +16,16 @@
 
 package net.ishchenko.idea.nginx;
 
+import javax.swing.*;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.fileTypes.ex.FileTypeIdentifiableByVirtualFile;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
-import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
 
 /**
  * Created by IntelliJ IDEA.
@@ -55,7 +57,7 @@ public class NginxFileType extends LanguageFileType implements FileTypeIdentifia
 
     @NotNull
     public String getDefaultExtension() {
-        return "nginx";
+        return "conf";
     }
 
     public Icon getIcon() {

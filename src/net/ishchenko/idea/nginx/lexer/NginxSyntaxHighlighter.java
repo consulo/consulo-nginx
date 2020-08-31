@@ -16,6 +16,11 @@
 
 package net.ishchenko.idea.nginx.lexer;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -23,10 +28,6 @@ import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -47,6 +48,7 @@ public class NginxSyntaxHighlighter extends SyntaxHighlighterBase {
         colors.put(NginxElementTypes.CONTEXT_NAME, DefaultLanguageHighlighterColors.KEYWORD);
         colors.put(NginxElementTypes.DIRECTIVE_STRING_VALUE, DefaultLanguageHighlighterColors.STRING);
         colors.put(NginxElementTypes.INNER_VARIABLE, DefaultLanguageHighlighterColors.NUMBER);
+        colors.put(NginxElementTypes.TEMPLATE_VARIABLE, DefaultLanguageHighlighterColors.CONSTANT);
 
     }
 
