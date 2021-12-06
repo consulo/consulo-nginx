@@ -6,3 +6,5 @@ idea-nginx.jar
 build/
 vendor/
 *.iml
+.consulo/
+target/
