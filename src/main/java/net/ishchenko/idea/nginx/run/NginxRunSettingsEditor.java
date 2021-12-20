@@ -72,7 +72,7 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
             //The window will be too small on first open. So, i'm fixing dimensions on first open.
             //The dimension key generation logic is hidden in ShowSettingsUtil and I had to
             //copy key generation code here
-            NginxConfigurationManager configManager = NginxConfigurationManager.getInstance();
+            NginxConfigurationManager configManager = new NginxConfigurationManager(NginxServersConfiguration.getInstance());
             String dimensionServiceKey = "#" + configManager.getDisplayName().replaceAll("\n", "_").replaceAll(" ", "_");
             DimensionService dimensionService = DimensionService.getInstance();
             if (dimensionService.getSize(dimensionServiceKey) == null) {

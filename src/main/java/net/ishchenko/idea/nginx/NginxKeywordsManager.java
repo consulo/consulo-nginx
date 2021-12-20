@@ -16,6 +16,7 @@
 
 package net.ishchenko.idea.nginx;
 
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.BaseComponent;
 import com.intellij.util.Range;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
  * Date: 17.07.2009
  * Time: 16:35:47
  */
-public class NginxKeywordsManager implements BaseComponent {
+public class NginxKeywordsManager {
 
     //anything can happen inside these directive context
     public static final Set<String> CHAOS_DIRECTIVES = new HashSet<>();
@@ -111,8 +112,7 @@ public class NginxKeywordsManager implements BaseComponent {
     private Map<String, List<Set<String>>> ambiguousKeywords = new HashMap<>();
     private final String ANY_CONTEXT_FLAG = "NGX_ANY_CONF";
 
-    @Override
-    public void initComponent() {
+    public NginxKeywordsManager() {
         BufferedReader keywordsReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/keywords.txt")));
         BufferedReader variablesReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/variables.txt")));
         BufferedReader openrestyKeywordsReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/openrestykeywords.txt")));
@@ -265,13 +265,6 @@ public class NginxKeywordsManager implements BaseComponent {
         }
     }
 
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return "nginx.keywords";
-    }
-
-
     private static class ContextToFlagMapping {
         Map<String, Set<String>> map = new HashMap<>();
 
@@ -286,7 +279,7 @@ public class NginxKeywordsManager implements BaseComponent {
     }
 
     public static NginxKeywordsManager getInstance() {
-        return ApplicationManager.getApplication().getComponent(NginxKeywordsManager.class);
+        return Application.get().getInstance(NginxKeywordsManager.class);
     }
 }
 

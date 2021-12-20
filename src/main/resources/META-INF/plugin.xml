@@ -5,7 +5,7 @@
     <version>SNAPSHOT</version>
     <description>
         <![CDATA[
-        nginx server support for IntelliJ IDEA<br>
+        nginx server support for Consulo<br>
         Runs/reloads configuration/stops nginx server from IDEA.<br>
         Configuration file syntax highlighting, auto-completion and inspections.
 
@@ -40,26 +40,18 @@
         <gotoFileContributor implementation="net.ishchenko.idea.nginx.NginxChooseByNameContributor"/>
         <programRunner implementation="net.ishchenko.idea.nginx.run.NginxRunner"/>
         <fileTypeFactory implementation="net.ishchenko.idea.nginx.NginxFileTypeFactory"/>
-        <!--    <fileType name="nginx" implementationClass="net.ishchenko.idea.nginx.NginxFileType" language="nginx" extensions="nginx" fieldName="INSTANCE" />-->
         <languageInjector implementation="net.ishchenko.idea.nginx.injection.LuaInjector"/>
         <lang.findUsagesProvider language="nginx"
                                  implementationClass="net.ishchenko.idea.nginx.NginxFindUsagesProvider"/>
 
         <lang.syntaxHighlighterFactory language="nginx"
                                        implementationClass="consulo.nginx.NginxSyntaxHighlighterFactory"/>
-    </extensions>
 
-    <application-components>
-        <component>
-            <implementation-class>net.ishchenko.idea.nginx.NginxKeywordsManager</implementation-class>
-        </component>
-        <component>
-            <implementation-class>net.ishchenko.idea.nginx.configurator.NginxConfigurationManager</implementation-class>
-        </component>
-        <component>
-            <implementation-class>net.ishchenko.idea.nginx.configurator.NginxServersConfiguration</implementation-class>
-        </component>
-    </application-components>
+        <applicationService serviceImplementation="net.ishchenko.idea.nginx.configurator.NginxServersConfiguration"/>
+        <applicationService serviceImplementation="net.ishchenko.idea.nginx.NginxKeywordsManager" />
+        <applicationConfigurable id="nginx.servers" parentId="execution" displayName="Nginx"
+                                 instance="net.ishchenko.idea.nginx.configurator.NginxConfigurationManager"/>
+    </extensions>
 
     <actions>
         <action id="nginx.reload" class="net.ishchenko.idea.nginx.run.NginxReloadAction"

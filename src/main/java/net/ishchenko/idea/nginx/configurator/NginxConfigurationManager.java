@@ -16,13 +16,12 @@
 
 package net.ishchenko.idea.nginx.configurator;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.BaseComponent;
-import com.intellij.openapi.options.BaseConfigurable;
+import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import consulo.disposer.Disposable;
+import consulo.ui.annotation.RequiredUIAccess;
 import net.ishchenko.idea.nginx.NginxBundle;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -32,7 +31,7 @@ import javax.swing.*;
  * Date: 21.07.2009
  * Time: 15:10:16
  */
-public class NginxConfigurationManager extends BaseConfigurable implements BaseComponent {
+public class NginxConfigurationManager implements Configurable  {
 
     private NginxServersConfiguration configuration;
     private NginxConfigurationPanel panel;
@@ -45,22 +44,6 @@ public class NginxConfigurationManager extends BaseConfigurable implements BaseC
         return configuration;
     }
 
-    public static NginxConfigurationManager getInstance() {
-        return ApplicationManager.getApplication().getComponent(NginxConfigurationManager.class);
-    }
-
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return "nginx.configuration.manager";
-    }
-
-
-    @Override
-    public void initComponent() {
-
-    }
-
     @Nls
     public String getDisplayName() {
         return NginxBundle.message("config.title");
@@ -70,29 +53,34 @@ public class NginxConfigurationManager extends BaseConfigurable implements BaseC
         return null;
     }
 
+    @RequiredUIAccess
     @Override
     public void reset() {
         panel.reset();
     }
 
+    @RequiredUIAccess
     @Override
     public void apply() throws ConfigurationException {
         panel.apply();
     }
 
+    @RequiredUIAccess
     @Override
     public boolean isModified() {
         return panel.isModified();
     }
 
+    @RequiredUIAccess
     @Override
-    public JComponent createComponent() {
+    public JComponent createComponent(Disposable disposable) {
         if (panel == null) {
             panel = new NginxConfigurationPanel(configuration);
         }
         return panel.getPanel();
     }
 
+    @RequiredUIAccess
     public void disposeUIResources() {
         panel = null;
     }

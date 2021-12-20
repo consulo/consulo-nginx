@@ -17,16 +17,15 @@
 package net.ishchenko.idea.nginx.configurator;
 
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.BaseComponent;
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
+import jakarta.inject.Singleton;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -38,22 +37,16 @@ import java.util.*;
  * Time: 15:33:19
  */
 
-@State(name = NginxServersConfiguration.COMPONENT_NAME,
-        storages = {
-                @Storage(value = "$APP_CONFIG$/nginx.xml")
-        }
-)
-public class NginxServersConfiguration implements BaseComponent, PersistentStateComponent<Element>, Disposable {
-
-    public final static String COMPONENT_NAME = "nginxServers";
-
+@Singleton
+@State(name = "nginxServers", storages = @Storage("nginx.xml"))
+public class NginxServersConfiguration implements PersistentStateComponent<Element>, Disposable {
     private Set<NginxServerDescriptor> descriptors = new LinkedHashSet<>();
     private NginxServerDescriptor[] cachedDescriptors = null;
     private Map<String, Set<String>> cachedNameToPathsMapping;
     private Set<String> cachedFilepaths;
 
     public static NginxServersConfiguration getInstance() {
-        return ApplicationManager.getApplication().getComponent(NginxServersConfiguration.class);
+        return Application.get().getInstance(NginxServersConfiguration.class);
     }
 
     public synchronized NginxServerDescriptor[] getServersDescriptors() {
@@ -168,7 +161,7 @@ public class NginxServersConfiguration implements BaseComponent, PersistentState
 
         if (level > 2) {
             //only 2 inner folders, dude. that should be enough for most cases.
-            //and it should be done the other way at all (parsing includes in conf) 
+            //and it should be done the other way at all (parsing includes in conf)
             return;
         }
         if (file.isDirectory()) {
@@ -185,11 +178,4 @@ public class NginxServersConfiguration implements BaseComponent, PersistentState
         }
 
     }
-
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return COMPONENT_NAME;
-    }
-
 }

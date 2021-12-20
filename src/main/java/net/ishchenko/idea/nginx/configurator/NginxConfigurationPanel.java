@@ -24,9 +24,12 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.MultiLineLabelUI;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.JBColor;
+import com.intellij.ui.OnePixelSplitter;
+import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
-import com.intellij.ui.components.JBScrollPane;
+import com.intellij.util.ui.JBUI;
 import consulo.nginx.icon.NginxIconGroup;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
@@ -44,7 +47,7 @@ public class NginxConfigurationPanel {
 
     private NginxServersConfiguration config;
 
-    private JSplitPane panel;
+    private OnePixelSplitter panel;
     private JBList<NginxServerDescriptor> serverList;
 
     private TrickyMediator mediator = new TrickyMediator();
@@ -61,19 +64,16 @@ public class NginxConfigurationPanel {
         buttonsPanel.add(createRemoveButton());
 
         serverList = createServerList();
+        serverList.setBorder(JBUI.Borders.customLine(JBColor.border(), 1, 1, 1, 0));
         mediator.serverList = serverList;
 
-        JBScrollPane scrollPane = new JBScrollPane();
-        scrollPane.setViewportView(serverList);
-
         leftComponent.add(buttonsPanel, BorderLayout.NORTH);
-        leftComponent.add(scrollPane, BorderLayout.CENTER);
+        leftComponent.add(ScrollPaneFactory.createScrollPane(serverList, true), BorderLayout.CENTER);
 
-        panel = new JSplitPane();
-        panel.setLeftComponent(leftComponent);
-        panel.setRightComponent(rightComponent);
-        panel.setDividerLocation(300);
-
+        panel = new OnePixelSplitter();
+        panel.setFirstComponent(leftComponent);
+        panel.setSecondComponent(rightComponent);
+        panel.setProportion(0.4f);
     }
 
     private JBList<NginxServerDescriptor> createServerList() {
