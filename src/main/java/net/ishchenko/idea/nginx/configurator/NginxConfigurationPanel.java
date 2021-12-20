@@ -16,7 +16,6 @@
 
 package net.ishchenko.idea.nginx.configurator;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -124,7 +123,7 @@ public class NginxConfigurationPanel {
 
     public synchronized void apply() throws ConfigurationException {
 
-        PlatformDependentTools pdt = ServiceManager.getService(PlatformDependentTools.class);
+        PlatformDependentTools pdt = PlatformDependentTools.getInstance();
         for (int i = 0; i < serverList.getModel().getSize(); i++) {
             NginxServerDescriptor descriptor = serverList.getModel().getElementAt(i);
             if (!pdt.checkExecutable(descriptor.getExecutablePath())) {
@@ -174,7 +173,7 @@ public class NginxConfigurationPanel {
         PlatformDependentTools pdt;
 
         public TrickyMediator() {
-            pdt = ServiceManager.getService(PlatformDependentTools.class);
+            pdt = PlatformDependentTools.getInstance();
         }
 
         public void addNewServerClicked() {

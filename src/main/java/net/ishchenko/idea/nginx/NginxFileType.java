@@ -19,6 +19,7 @@ package net.ishchenko.idea.nginx;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.fileTypes.ex.FileTypeIdentifiableByVirtualFile;
 import com.intellij.openapi.vfs.VirtualFile;
+import consulo.localize.LocalizeValue;
 import consulo.nginx.icon.NginxIconGroup;
 import consulo.ui.image.Image;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
@@ -48,8 +49,8 @@ public class NginxFileType extends LanguageFileType implements FileTypeIdentifia
     }
 
     @NotNull
-    public String getDescription() {
-        return "nginx config file";
+    public LocalizeValue getDescription() {
+        return LocalizeValue.localizeTODO("nginx config file");
     }
 
     @NotNull

@@ -24,7 +24,6 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
@@ -93,7 +92,7 @@ public class NginxRunConfiguration extends RunConfigurationBase {
             throw new RuntimeConfigurationException(NginxBundle.message("run.error.badpath"));
         } else {
 
-            PlatformDependentTools pdt = ServiceManager.getService(PlatformDependentTools.class);
+            PlatformDependentTools pdt = PlatformDependentTools.getInstance();
             if (!pdt.checkExecutable(vfile)) {
                 throw new RuntimeConfigurationException(NginxBundle.message("run.error.notexecutable"));
             }

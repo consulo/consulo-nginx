@@ -23,7 +23,6 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -74,7 +73,7 @@ public class NginxProcessHandler extends OSProcessHandler {
             throw new ExecutionException(NginxBundle.message("run.error.badpath", descriptorCopy.getExecutablePath()));
         }
 
-        PlatformDependentTools pdt = ServiceManager.getService(PlatformDependentTools.class);
+        PlatformDependentTools pdt = PlatformDependentTools.getInstance();
 
         ProcessBuilder builder = new ProcessBuilder(pdt.getStartCommand(descriptorCopy));
         builder.directory(new File(executableVirtualFile.getParent().getPath()));
@@ -100,7 +99,7 @@ public class NginxProcessHandler extends OSProcessHandler {
 
     private boolean tryToStop() {
 
-        PlatformDependentTools pdt = ServiceManager.getService(PlatformDependentTools.class);
+        PlatformDependentTools pdt = PlatformDependentTools.getInstance();
         VirtualFile executableVirtualFile = LocalFileSystem.getInstance().findFileByPath(descriptorCopy.getExecutablePath());
         String[] stopCommand = pdt.getStopCommand(descriptorCopy);
         ProcessBuilder builder = new ProcessBuilder(stopCommand);

@@ -49,12 +49,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<repositoryChannel>nightly</repositoryChannel>
-					<dependencies>
-						<dependency>consulo.dotnet</dependency>
-						<dependency>consulo.dotnet.mono</dependency>
-						<dependency>consulo.dotnet.microsoft</dependency>
-						<dependency>com.intellij.xml</dependency>
-					</dependencies>
 					<packaging>
 						<skip>${dev.mode}</skip>
 						<version>${build.number}</version>

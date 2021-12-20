@@ -17,6 +17,7 @@
 package net.ishchenko.idea.nginx.platform;
 
 import com.intellij.openapi.vfs.VirtualFile;
+import consulo.platform.Platform;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 
 /**
@@ -26,6 +27,16 @@ import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
  * Time: 1:30:36
  */
 public interface PlatformDependentTools {
+    static PlatformDependentTools linuxImpl = new LinuxSpecificTools();
+    static PlatformDependentTools windowsImpl = new WindowsSpecificTools();
+
+    static PlatformDependentTools getInstance() {
+        if (Platform.current().os().isWindows()) {
+            return windowsImpl;
+        }
+
+        return linuxImpl;
+    }
 
     boolean checkExecutable(VirtualFile file);
 

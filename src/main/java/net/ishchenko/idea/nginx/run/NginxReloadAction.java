@@ -25,7 +25,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -99,7 +98,7 @@ public class NginxReloadAction extends AnAction {
     private void testConfig(final NginxServerDescriptor descriptor, final ConsoleView console, Project project) throws ReloadException, IOException {
 
         VirtualFile executableFile = LocalFileSystem.getInstance().findFileByPath(descriptor.getExecutablePath());
-        PlatformDependentTools pdt = ServiceManager.getService(PlatformDependentTools.class);
+        PlatformDependentTools pdt = PlatformDependentTools.getInstance();
         String[] testCommand = pdt.getTestCommand(descriptor);
         int exitValue = runAndGetExitValue(testCommand, new File(executableFile.getParent().getPath()), console);
 
@@ -112,7 +111,7 @@ public class NginxReloadAction extends AnAction {
     private void doReload(NginxServerDescriptor descriptor, ConsoleView console, Project project) throws ReloadException, IOException {
 
         VirtualFile executableFile = LocalFileSystem.getInstance().findFileByPath(descriptor.getExecutablePath());
-        PlatformDependentTools pdt = ServiceManager.getService(PlatformDependentTools.class);
+        PlatformDependentTools pdt = PlatformDependentTools.getInstance();
         String[] reloadCommand = pdt.getReloadCommand(descriptor);
         int exitValue = runAndGetExitValue(reloadCommand, new File(executableFile.getParent().getPath()), console);
 
