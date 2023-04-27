@@ -16,10 +16,10 @@
 
 package net.ishchenko.idea.nginx.platform;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.StringUtil;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 
 import java.io.File;

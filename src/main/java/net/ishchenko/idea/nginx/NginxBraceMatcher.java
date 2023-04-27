@@ -16,13 +16,13 @@
 
 package net.ishchenko.idea.nginx;
 
-import com.intellij.lang.BracePair;
-import com.intellij.lang.PairedBraceMatcher;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.tree.IElementType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.BracePair;
+import consulo.language.Language;
+import consulo.language.PairedBraceMatcher;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,19 +30,18 @@ import org.jetbrains.annotations.Nullable;
  * Date: 13.07.2009
  * Time: 20:37:13
  */
+@ExtensionImpl
 public class NginxBraceMatcher implements PairedBraceMatcher {
 
     public static final BracePair[] BRACES = new BracePair[]{new BracePair(NginxElementTypes.OPENING_BRACE, NginxElementTypes.CLOSING_BRACE, true)};
-
-    public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
-        return 0;
-    }
 
     public BracePair[] getPairs() {
         return BRACES;
     }
 
-    public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType contextType) {
-        return true;
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
     }
 }

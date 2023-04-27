@@ -16,8 +16,8 @@
 
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.openapi.ui.MultiLineLabelUI;
-import consulo.awt.TargetAWT;
+import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.nginx.icon.NginxIconGroup;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;

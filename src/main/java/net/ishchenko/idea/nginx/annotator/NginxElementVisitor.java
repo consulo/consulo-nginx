@@ -16,7 +16,7 @@
 
 package net.ishchenko.idea.nginx.annotator;
 
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 import net.ishchenko.idea.nginx.psi.*;
 
 /**

@@ -16,10 +16,10 @@
 
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
+import consulo.language.impl.psi.ASTWrapperPsiElement;
+import consulo.language.ast.ASTNode;
 import net.ishchenko.idea.nginx.psi.NginxPsiElement;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class NginxElementImpl extends ASTWrapperPsiElement implements NginxPsiElement {
 
-    public NginxElementImpl(@NotNull ASTNode node) {
+    public NginxElementImpl(@Nonnull ASTNode node) {
         super(node);
     }
 

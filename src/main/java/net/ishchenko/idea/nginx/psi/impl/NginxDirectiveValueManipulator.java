@@ -1,21 +1,24 @@
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.AbstractElementManipulator;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.util.IncorrectOperationException;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.document.FileDocumentManager;
+import consulo.document.util.TextRange;
+import consulo.language.psi.AbstractElementManipulator;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.util.IncorrectOperationException;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
 import net.ishchenko.idea.nginx.psi.NginxDirectiveValue;
 
+import javax.annotation.Nonnull;
+
 /**
- * Created by IntelliJ IDEA.
  * User: Max
  * Date: 24.08.2009
  * Time: 14:48:06
  */
+@ExtensionImpl
 public class NginxDirectiveValueManipulator extends AbstractElementManipulator<NginxDirectiveValue> {
 
     /**
@@ -34,5 +37,11 @@ public class NginxDirectiveValueManipulator extends AbstractElementManipulator<N
 
         return element;
 
+    }
+
+    @Nonnull
+    @Override
+    public Class<NginxDirectiveValue> getElementClass() {
+        return NginxDirectiveValue.class;
     }
 }

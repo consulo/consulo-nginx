@@ -16,14 +16,18 @@
 
 package net.ishchenko.idea.nginx;
 
-import com.intellij.lang.Commenter;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Commenter;
+import consulo.language.Language;
+
+import javax.annotation.Nonnull;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Max
  * Date: 04.07.2009
  * Time: 14:12:45
  */
+@ExtensionImpl
 public class NginxCommenter implements Commenter {
 
     public String getLineCommentPrefix() {
@@ -45,5 +49,11 @@ public class NginxCommenter implements Commenter {
 
     public String getCommentedBlockCommentSuffix() {
         return null;
+    }
+
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
     }
 }

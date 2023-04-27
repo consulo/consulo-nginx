@@ -1,12 +1,15 @@
 package net.ishchenko.idea.nginx;
 
-import com.intellij.lang.cacheBuilder.WordsScanner;
-import com.intellij.lang.findUsages.FindUsagesProvider;
-import com.intellij.psi.PsiElement;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.cacheBuilder.WordsScanner;
+import consulo.language.findUsage.FindUsagesProvider;
+import consulo.language.psi.PsiElement;
 import net.ishchenko.idea.nginx.psi.NginxInnerVariable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class NginxFindUsagesProvider implements FindUsagesProvider {
 
     @Nullable
@@ -16,26 +19,20 @@ public class NginxFindUsagesProvider implements FindUsagesProvider {
     }
 
     @Override
-    public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
+    public boolean canFindUsagesFor(@Nonnull PsiElement psiElement) {
         return psiElement instanceof NginxInnerVariable;
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public String getHelpId(@NotNull PsiElement psiElement) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public String getType(@NotNull PsiElement psiElement) {
+    public String getType(@Nonnull PsiElement psiElement) {
         if (psiElement instanceof NginxInnerVariable) return "variable";
         return "";
     }
 
-    @NotNull
+    @Nonnull
     @Override
-    public String getDescriptiveName(@NotNull PsiElement psiElement) {
+    public String getDescriptiveName(@Nonnull PsiElement psiElement) {
         if (psiElement instanceof NginxInnerVariable) {
             NginxInnerVariable var = (NginxInnerVariable)psiElement;
             return var.getName();
@@ -43,9 +40,9 @@ public class NginxFindUsagesProvider implements FindUsagesProvider {
         return "";
     }
 
-    @NotNull
+    @Nonnull
     @Override
-    public String getNodeText(@NotNull PsiElement psiElement, boolean b) {
+    public String getNodeText(@Nonnull PsiElement psiElement, boolean b) {
         if (psiElement instanceof NginxInnerVariable) {
             NginxInnerVariable var = (NginxInnerVariable)psiElement;
             return var.getName();
@@ -53,4 +50,9 @@ public class NginxFindUsagesProvider implements FindUsagesProvider {
         return "";
     }
 
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
+    }
 }

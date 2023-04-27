@@ -16,7 +16,7 @@
 
 package net.ishchenko.idea.nginx.configurator;
 
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import consulo.ui.ex.awt.ComponentWithBrowseButton;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;

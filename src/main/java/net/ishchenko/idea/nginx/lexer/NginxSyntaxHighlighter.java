@@ -19,15 +19,15 @@ package net.ishchenko.idea.nginx.lexer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
-import com.intellij.lexer.FlexAdapter;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.HighlighterColors;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.lexer.FlexAdapter;
+import consulo.language.lexer.Lexer;
+import consulo.codeEditor.DefaultLanguageHighlighterColors;
+import consulo.codeEditor.HighlighterColors;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.language.editor.highlight.SyntaxHighlighterBase;
+import consulo.language.ast.IElementType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,12 +52,12 @@ public class NginxSyntaxHighlighter extends SyntaxHighlighterBase {
 
     }
 
-    @NotNull
+    @Nonnull
     public Lexer getHighlightingLexer() {
         return new FlexAdapter(new _NginxLexer(null));
     }
 
-    @NotNull
+    @Nonnull
     public TextAttributesKey[] getTokenHighlights(IElementType iElementType) {
 
         return new TextAttributesKey[]{colors.get(iElementType)};

@@ -1,20 +1,20 @@
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.Conditions;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import net.ishchenko.idea.nginx.psi.NginxVariableReference;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.function.Conditions;
 import net.ishchenko.idea.nginx.annotator.NginxElementVisitor;
 import net.ishchenko.idea.nginx.psi.NginxContext;
 import net.ishchenko.idea.nginx.psi.NginxInnerVariable;
+import net.ishchenko.idea.nginx.psi.NginxVariableReference;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
@@ -25,12 +25,12 @@ import java.util.Collection;
  */
 public class NginxInnerVariableImpl extends NginxElementImpl implements NginxInnerVariable {
 
-    public NginxInnerVariableImpl(@NotNull ASTNode node) {
+    public NginxInnerVariableImpl(@Nonnull ASTNode node) {
         super(node);
     }
 
     @Override
-    public void accept(@NotNull PsiElementVisitor visitor) {
+    public void accept(@Nonnull PsiElementVisitor visitor) {
         if (visitor instanceof NginxElementVisitor) {
             ((NginxElementVisitor) visitor).visitInnerVariable(this);
         } else {
@@ -54,7 +54,7 @@ public class NginxInnerVariableImpl extends NginxElementImpl implements NginxInn
         return references.length == 0 ? null : references[0];
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public PsiReference[] getReferences() {
         Collection<NginxInnerVariable> children = PsiTreeUtil.findChildrenOfType(

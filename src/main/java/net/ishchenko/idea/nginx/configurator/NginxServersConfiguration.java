@@ -16,17 +16,20 @@
 
 package net.ishchenko.idea.nginx.configurator;
 
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.xmlb.XmlSerializer;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
+import consulo.disposer.Disposable;
+import consulo.application.Application;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.xml.serializer.XmlSerializer;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -36,9 +39,10 @@ import java.util.*;
  * Date: 22.07.2009
  * Time: 15:33:19
  */
-
 @Singleton
 @State(name = "nginxServers", storages = @Storage("nginx.xml"))
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
 public class NginxServersConfiguration implements PersistentStateComponent<Element>, Disposable {
     private Set<NginxServerDescriptor> descriptors = new LinkedHashSet<>();
     private NginxServerDescriptor[] cachedDescriptors = null;
@@ -168,7 +172,8 @@ public class NginxServersConfiguration implements PersistentStateComponent<Eleme
             for (VirtualFile child : file.getChildren()) {
                 recursiveAdd(result, child, level + 1);
             }
-        } else {
+        }
+        else {
             String path = file.getPath();
             String name = path.substring(path.lastIndexOf('/') + 1);
             if (!result.containsKey(name)) {

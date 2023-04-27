@@ -16,25 +16,31 @@
 
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessAdapter;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.execution.ui.console.ConsoleView;
+import consulo.execution.ui.console.ConsoleViewContentType;
+import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessHandlerBuilder;
+import consulo.process.ProcessOutputTypes;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.event.ProcessEvent;
+import consulo.process.event.ProcessListener;
 import consulo.util.dataholder.Key;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
 
+import javax.annotation.Nullable;
 import java.io.File;
-import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,19 +48,17 @@ import java.io.IOException;
  * Date: 24.07.2009
  * Time: 2:42:59
  */
-public class NginxProcessHandler extends OSProcessHandler {
+public class NginxProcessHandler extends ProcessHandler {
 
-    public static final Logger LOG = Logger.getInstance("#net.ishchenko.idea.nginx.run.NginxProcessHandler");
+    public static final Logger LOG = Logger.getInstance(NginxProcessHandler.class);
 
-    private NginxServerDescriptor descriptorCopy;
+    private final ProcessHandler originalProcessHandler;
+    private final NginxServerDescriptor descriptorCopy;
     private ConsoleView console;
 
-    private NginxProcessHandler(Process process, String commandLine, NginxServerDescriptor descriptorCopy) {
-
-        super(process, commandLine);
-
+    private NginxProcessHandler(GeneralCommandLine commandLine, NginxServerDescriptor descriptorCopy) throws ExecutionException {
+        originalProcessHandler = ProcessHandlerBuilder.create(commandLine).build();
         this.descriptorCopy = descriptorCopy;
-
     }
 
     public static NginxProcessHandler create(NginxRunConfiguration config) throws ExecutionException {
@@ -75,39 +79,68 @@ public class NginxProcessHandler extends OSProcessHandler {
 
         PlatformDependentTools pdt = PlatformDependentTools.getInstance();
 
-        ProcessBuilder builder = new ProcessBuilder(pdt.getStartCommand(descriptorCopy));
-        builder.directory(new File(executableVirtualFile.getParent().getPath()));
-        try {
-            return new NginxProcessHandler(builder.start(), StringUtil.join(pdt.getStartCommand(descriptorCopy), " "), descriptorCopy.clone());
-        } catch (IOException e) {
-            throw new ExecutionException(e.getMessage(), e);
+        GeneralCommandLine cmd = new GeneralCommandLine(pdt.getStartCommand(descriptorCopy));
+        cmd.withWorkDirectory(new File(executableVirtualFile.getParent().getPath()));
+        return new NginxProcessHandler(cmd, descriptorCopy.clone());
+    }
+
+    @Override
+    public void startNotify() {
+        originalProcessHandler.startNotify();
+        super.startNotify();
+    }
+
+    @Override
+    public void addProcessListener(ProcessListener listener) {
+        originalProcessHandler.addProcessListener(listener);
+    }
+
+    @Nullable
+    @Override
+    public Integer getExitCode() {
+        return originalProcessHandler.getExitCode();
+    }
+
+    @Override
+    protected void destroyProcessImpl() {
+        if (tryToStop()) {
+            originalProcessHandler.destroyProcess();
         }
+        else {
+            console.print("Could not stop process.\n", ConsoleViewContentType.ERROR_OUTPUT);
+        }
+    }
+
+    @Override
+    protected void detachProcessImpl() {
 
     }
 
-
     @Override
-    public void destroyProcess() {
-        if (tryToStop()) {
-            super.destroyProcess();
-        } else {
+    public boolean detachIsDefault() {
+        return false;
+    }
 
-            console.print("Could not stop process.\n", ConsoleViewContentType.ERROR_OUTPUT);
-
-        }
+    @Nullable
+    @Override
+    public OutputStream getProcessInput() {
+        return null;
     }
 
     private boolean tryToStop() {
-
         PlatformDependentTools pdt = PlatformDependentTools.getInstance();
         VirtualFile executableVirtualFile = LocalFileSystem.getInstance().findFileByPath(descriptorCopy.getExecutablePath());
         String[] stopCommand = pdt.getStopCommand(descriptorCopy);
-        ProcessBuilder builder = new ProcessBuilder(stopCommand);
-        builder.directory(new File(executableVirtualFile.getParent().getPath()));
         boolean successfullyStopped = false;
         try {
-            OSProcessHandler osph = new OSProcessHandler(builder.start(), StringUtil.join(stopCommand, " "));
-            osph.addProcessListener(new ProcessAdapter() {
+            List<String> args = new ArrayList<>();
+            Collections.addAll(args, stopCommand);
+
+            GeneralCommandLine commandLine = new GeneralCommandLine(args);
+            commandLine.setWorkDirectory(executableVirtualFile.getParent().getPath());
+
+            ProcessHandler osph = ProcessHandlerBuilder.create(commandLine).build();
+            osph.addProcessListener(new ProcessListener() {
                 @Override
                 public void onTextAvailable(final ProcessEvent event, Key outputType) {
                     ConsoleViewContentType contentType = ConsoleViewContentType.SYSTEM_OUTPUT;
@@ -120,9 +153,10 @@ public class NginxProcessHandler extends OSProcessHandler {
             osph.startNotify();
             osph.waitFor();
             osph.destroyProcess(); //is that needed if waitFor has returned?
-            successfullyStopped = osph.getProcess().exitValue() == 0;
+            successfullyStopped = Objects.equals(osph.getExitCode(), 0);
 
-        } catch (IOException e) {
+        }
+        catch (Exception e) {
             LOG.error(e);
         }
 

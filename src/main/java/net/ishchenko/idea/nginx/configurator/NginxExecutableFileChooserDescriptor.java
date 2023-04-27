@@ -16,8 +16,8 @@
 
 package net.ishchenko.idea.nginx.configurator;
 
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.fileChooser.FileChooserDescriptor;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
 
 public class NginxExecutableFileChooserDescriptor extends FileChooserDescriptor {

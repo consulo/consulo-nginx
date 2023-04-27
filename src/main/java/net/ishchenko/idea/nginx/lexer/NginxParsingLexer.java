@@ -16,7 +16,7 @@
 
 package net.ishchenko.idea.nginx.lexer;
 
-import com.intellij.lexer.FlexAdapter;
+import consulo.language.lexer.FlexAdapter;
 
 /**
  * Created by IntelliJ IDEA.

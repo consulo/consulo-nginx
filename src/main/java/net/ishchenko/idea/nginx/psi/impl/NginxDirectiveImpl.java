@@ -16,9 +16,9 @@
 
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.ast.TokenSet;
 import net.ishchenko.idea.nginx.NginxKeywordsManager;
 import net.ishchenko.idea.nginx.annotator.NginxElementVisitor;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
@@ -26,9 +26,9 @@ import net.ishchenko.idea.nginx.psi.NginxComplexValue;
 import net.ishchenko.idea.nginx.psi.NginxContext;
 import net.ishchenko.idea.nginx.psi.NginxDirective;
 import net.ishchenko.idea.nginx.psi.NginxDirectiveName;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class NginxDirectiveImpl extends NginxElementImpl implements NginxDirecti
     }
 
     @Override
-    public void accept(@NotNull PsiElementVisitor visitor) {
+    public void accept(@Nonnull PsiElementVisitor visitor) {
         if (visitor instanceof NginxElementVisitor) {
             ((NginxElementVisitor) visitor).visitDirective(this);
         } else {
@@ -55,12 +55,12 @@ public class NginxDirectiveImpl extends NginxElementImpl implements NginxDirecti
         }
     }
 
-    @NotNull
+    @Nonnull
     public String getNameString() {
         return getDirectiveName().getText();
     }
 
-    @NotNull
+    @Nonnull
     public NginxDirectiveName getDirectiveName() {
         ASTNode nameNode = getNode().findChildByType(NginxElementTypes.CONTEXT_NAME);
         if (nameNode == null) {
@@ -86,7 +86,7 @@ public class NginxDirectiveImpl extends NginxElementImpl implements NginxDirecti
         }
     }
 
-    @NotNull
+    @Nonnull
     public List<NginxComplexValue> getValues() {
         ArrayList<NginxComplexValue> result = new ArrayList<>();
         for (ASTNode value : getNode().getChildren(DIRECTIVE_VALUE_TOKENS)) {

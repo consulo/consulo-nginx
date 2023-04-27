@@ -1,7 +1,7 @@
 package net.ishchenko.idea.nginx.lexer;
 
-import com.intellij.lexer.FlexLexer;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.lexer.FlexLexer;
+import consulo.language.ast.IElementType;
 
 %%
 

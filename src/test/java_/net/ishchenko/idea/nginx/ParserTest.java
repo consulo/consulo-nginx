@@ -1,7 +1,7 @@
 package net.ishchenko.idea.nginx;
 
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageExtension;
+import consulo.language.Language;
+import consulo.language.extension.LanguageExtension;
 import com.intellij.testFramework.ParsingTestCase;
 import net.ishchenko.idea.nginx.parser.NginxParserDefinition;
 

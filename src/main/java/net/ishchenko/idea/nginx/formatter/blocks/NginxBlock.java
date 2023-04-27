@@ -16,20 +16,26 @@
 
 package net.ishchenko.idea.nginx.formatter.blocks;
 
-import com.intellij.formatting.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiWhiteSpace;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
+import consulo.language.codeStyle.ASTBlock;
+import consulo.language.codeStyle.Alignment;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.ChildAttributes;
+import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.Spacing;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.PsiWhiteSpace;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
 import net.ishchenko.idea.nginx.psi.NginxComplexValue;
 import net.ishchenko.idea.nginx.psi.NginxContext;
 import net.ishchenko.idea.nginx.psi.NginxDirective;
 import net.ishchenko.idea.nginx.psi.NginxPsiFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +61,7 @@ public class NginxBlock implements ASTBlock {
         this.alignment = alignment;
     }
 
-    @NotNull
+    @Nonnull
     public List<Block> getSubBlocks() {
 
         if (blocks == null) {
@@ -113,7 +119,7 @@ public class NginxBlock implements ASTBlock {
         return node;
     }
 
-    @NotNull
+    @Nonnull
     public TextRange getTextRange() {
         return node.getTextRange();
     }
@@ -138,7 +144,7 @@ public class NginxBlock implements ASTBlock {
         return getNode().getFirstChildNode() == null || getNode().getPsi() instanceof NginxComplexValue;
     }
 
-    @NotNull
+    @Nonnull
     public ChildAttributes getChildAttributes(int newChildIndex) {
 
         if (getNode().getPsi() instanceof NginxContext) {

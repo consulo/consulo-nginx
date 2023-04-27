@@ -16,8 +16,8 @@
 
 package net.ishchenko.idea.nginx.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -29,10 +29,10 @@ import java.util.List;
  */
 public interface NginxDirective extends NginxPsiElement {
 
-    @NotNull
+    @Nonnull
     String getNameString();
 
-    @NotNull
+    @Nonnull
     NginxDirectiveName getDirectiveName();
 
     @Nullable
@@ -41,7 +41,7 @@ public interface NginxDirective extends NginxPsiElement {
     @Nullable
     NginxContext getParentContext();
 
-    @NotNull
+    @Nonnull
     List<NginxComplexValue> getValues();
 
     /**

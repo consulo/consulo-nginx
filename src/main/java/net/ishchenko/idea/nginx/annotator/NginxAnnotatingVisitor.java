@@ -16,10 +16,10 @@
 
 package net.ishchenko.idea.nginx.annotator;
 
-import com.intellij.lang.annotation.AnnotationHolder;
-import com.intellij.lang.annotation.Annotator;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.Range;
+import consulo.language.editor.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.Annotator;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.Range;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.NginxKeywordsManager;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;

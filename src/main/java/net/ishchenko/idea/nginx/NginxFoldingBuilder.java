@@ -16,13 +16,16 @@
 
 package net.ishchenko.idea.nginx;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.folding.FoldingBuilder;
-import com.intellij.lang.folding.FoldingDescriptor;
-import com.intellij.openapi.editor.Document;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.ast.ASTNode;
+import consulo.language.editor.folding.FoldingBuilder;
+import consulo.language.editor.folding.FoldingDescriptor;
+import consulo.document.Document;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
 import net.ishchenko.idea.nginx.psi.NginxDirective;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ import java.util.List;
  * Time: 22:00:02
  */
 
+@ExtensionImpl
 public class NginxFoldingBuilder implements FoldingBuilder {
 
     public FoldingDescriptor[] buildFoldRegions(ASTNode node, Document document) {
@@ -71,5 +75,9 @@ public class NginxFoldingBuilder implements FoldingBuilder {
         return false;
     }
 
-
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
+    }
 }

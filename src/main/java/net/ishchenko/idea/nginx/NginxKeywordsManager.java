@@ -16,11 +16,12 @@
 
 package net.ishchenko.idea.nginx;
 
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.BaseComponent;
-import com.intellij.util.Range;
-import org.jetbrains.annotations.NotNull;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
+import consulo.application.Application;
+import consulo.util.lang.Range;
+import jakarta.inject.Singleton;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,6 +36,9 @@ import java.util.stream.Collectors;
  * Date: 17.07.2009
  * Time: 16:35:47
  */
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
+@Singleton
 public class NginxKeywordsManager {
 
     //anything can happen inside these directive context
@@ -123,17 +127,21 @@ public class NginxKeywordsManager {
             readVariables(variablesReader);
             readKeywords(openrestyKeywordsReader);
             readVariables(openrestyVariablesReader);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             oops = e;
-        } finally {
+        }
+        finally {
             try {
                 keywordsReader.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 oops = e;
             }
             try {
                 variablesReader.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 oops = e;
             }
         }
@@ -182,7 +190,8 @@ public class NginxKeywordsManager {
 
         if (flagsForContext == null) {
             return true; //checkCanHaveChildContext will tell the truth when called on parent
-        } else {
+        }
+        else {
             boolean yesWeCan = false;
             for (String flag : flagsForContext) {
                 yesWeCan = yesWeCan || doCheckFlag(directive, flag);
@@ -252,7 +261,8 @@ public class NginxKeywordsManager {
             Set<String> flags = new HashSet<>(Arrays.asList(splitLine).subList(1, splitLine.length));
             if (!keywords.containsKey(keyword)) {
                 keywords.put(keyword, flags);
-            } else {
+            }
+            else {
                 keywords.get(keyword).addAll(flags);
             }
         }

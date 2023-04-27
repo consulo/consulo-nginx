@@ -16,14 +16,14 @@
 
 package net.ishchenko.idea.nginx;
 
-import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.fileTypes.ex.FileTypeIdentifiableByVirtualFile;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.language.file.LanguageFileType;
+import consulo.virtualFileSystem.fileType.FileTypeIdentifiableByVirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.localize.LocalizeValue;
 import consulo.nginx.icon.NginxIconGroup;
 import consulo.ui.image.Image;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -43,17 +43,17 @@ public class NginxFileType extends LanguageFileType implements FileTypeIdentifia
         return INSTANCE;
     }
 
-    @NotNull
+    @Nonnull
     public String getId() {
         return "nginx";
     }
 
-    @NotNull
+    @Nonnull
     public LocalizeValue getDescription() {
         return LocalizeValue.localizeTODO("nginx config file");
     }
 
-    @NotNull
+    @Nonnull
     public String getDefaultExtension() {
         return "conf";
     }

@@ -16,22 +16,17 @@
 
 package net.ishchenko.idea.nginx;
 
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.psi.PsiElement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import net.ishchenko.idea.nginx.psi.NginxContext;
-import net.ishchenko.idea.nginx.psi.NginxDirectiveName;
-import net.ishchenko.idea.nginx.psi.NginxDirectiveValue;
-import net.ishchenko.idea.nginx.psi.NginxInnerVariable;
-import net.ishchenko.idea.nginx.psi.NginxPsiFile;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.editor.completion.CompletionContributor;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.psi.PsiElement;
+import net.ishchenko.idea.nginx.psi.*;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,6 +34,7 @@ import net.ishchenko.idea.nginx.psi.NginxPsiFile;
  * Date: 15.07.2009
  * Time: 0:37:39
  */
+@ExtensionImpl
 public class NginxCompletionContributor extends CompletionContributor {
 
     private static List<LookupElementBuilder> booleanVariants = new ArrayList<>();
@@ -154,4 +150,9 @@ public class NginxCompletionContributor extends CompletionContributor {
     }
 
 
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
+    }
 }

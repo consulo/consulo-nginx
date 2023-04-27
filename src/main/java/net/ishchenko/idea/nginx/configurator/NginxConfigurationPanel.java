@@ -16,21 +16,15 @@
 
 package net.ishchenko.idea.nginx.configurator;
 
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.ui.DialogBuilder;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.MultiLineLabelUI;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.OnePixelSplitter;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.ui.JBUI;
+import consulo.configurable.ConfigurationException;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.fileChooser.IdeaFileChooser;
 import consulo.nginx.icon.NginxIconGroup;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
 
@@ -178,7 +172,7 @@ public class NginxConfigurationPanel {
 
         public void addNewServerClicked() {
 
-            VirtualFile[] file = FileChooser.chooseFiles(new NginxExecutableFileChooserDescriptor(), serverList, null, null);
+            VirtualFile[] file = IdeaFileChooser.chooseFiles(new NginxExecutableFileChooserDescriptor(), serverList, null, null);
             if (file.length > 0) {
 
                 NginxServerDescriptor newDescriptor = getDescriptorFromFile(file[0]);
@@ -215,7 +209,7 @@ public class NginxConfigurationPanel {
         public void chooseExecutableClicked() {
 
             VirtualFile oldFile = LocalFileSystem.getInstance().findFileByPath(executableField.getText());
-            VirtualFile[] chosen = FileChooser.chooseFiles(new NginxExecutableFileChooserDescriptor(), serverList, null, oldFile);
+            VirtualFile[] chosen = IdeaFileChooser.chooseFiles(new NginxExecutableFileChooserDescriptor(), serverList, null, oldFile);
 
             if (chosen.length > 0) {
 
@@ -254,7 +248,7 @@ public class NginxConfigurationPanel {
 
         public void chooseConfigurationClicked() {
             VirtualFile oldFile = LocalFileSystem.getInstance().findFileByPath(configField.getText());
-            VirtualFile[] file = FileChooser.chooseFiles(FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor(), serverList, null, oldFile);
+            VirtualFile[] file = IdeaFileChooser.chooseFiles(FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor(), serverList, null, oldFile);
             if (file.length > 0) {
                 configField.setText(file[0].getPath());
                 sync();
@@ -263,7 +257,7 @@ public class NginxConfigurationPanel {
 
         public void choosePidClicked() {
             VirtualFile oldFile = LocalFileSystem.getInstance().findFileByPath(pidField.getText());
-            VirtualFile[] file = FileChooser.chooseFiles(FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor(), serverList, null, oldFile);
+            VirtualFile[] file = IdeaFileChooser.chooseFiles(FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor(), serverList, null, oldFile);
             if (file.length > 0) {
                 pidField.setText(file[0].getPath());
                 sync();

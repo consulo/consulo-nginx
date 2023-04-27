@@ -16,21 +16,22 @@
 
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.configurations.ConfigurationType;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.openapi.project.Project;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.execution.configuration.ConfigurationFactory;
+import consulo.execution.configuration.ConfigurationType;
+import consulo.execution.configuration.RunConfiguration;
 import consulo.nginx.icon.NginxIconGroup;
+import consulo.project.Project;
 import consulo.ui.image.Image;
 import net.ishchenko.idea.nginx.NginxBundle;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Max
  * Date: 14.07.2009
  * Time: 19:10:29
  */
+@ExtensionImpl
 public class NginxConfigurationType implements ConfigurationType {
 
     NginxConfigurationFactory ncf = new NginxConfigurationFactory(this);
@@ -47,7 +48,7 @@ public class NginxConfigurationType implements ConfigurationType {
         return NginxIconGroup.nginx();
     }
 
-    @NotNull
+    @Nonnull
     public String getId() {
         return "nginx.configuration.type";
     }
@@ -58,7 +59,7 @@ public class NginxConfigurationType implements ConfigurationType {
 
     private static class NginxConfigurationFactory extends ConfigurationFactory {
 
-        protected NginxConfigurationFactory(@NotNull ConfigurationType type) {
+        protected NginxConfigurationFactory(@Nonnull ConfigurationType type) {
             super(type);
         }
 

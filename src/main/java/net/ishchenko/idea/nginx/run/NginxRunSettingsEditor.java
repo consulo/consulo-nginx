@@ -16,17 +16,15 @@
 
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.options.ex.SingleConfigurableEditor;
-import com.intellij.openapi.util.DimensionService;
+import consulo.configurable.ConfigurationException;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.ide.setting.ShowSettingsUtil;
 import net.ishchenko.idea.nginx.configurator.NginxConfigurationManager;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,7 +50,7 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
         mediator.resetEditorFrom(s);
     }
 
-    @NotNull
+    @Nonnull
     protected JComponent createEditor() {
         return new NginxRunSettingsForm(mediator).getPanel();
     }
@@ -66,21 +64,7 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
         NginxRunSettingsForm form;
 
         void showServerManagerDialog() {
-            //This is a little hack.
-            //I could have used ShowSettingsUtil.editConfigurable(), but it gives me
-            //little control over opening window. The main problem is dimensions.
-            //The window will be too small on first open. So, i'm fixing dimensions on first open.
-            //The dimension key generation logic is hidden in ShowSettingsUtil and I had to
-            //copy key generation code here
-            NginxConfigurationManager configManager = new NginxConfigurationManager(NginxServersConfiguration.getInstance());
-            String dimensionServiceKey = "#" + configManager.getDisplayName().replaceAll("\n", "_").replaceAll(" ", "_");
-            DimensionService dimensionService = DimensionService.getInstance();
-            if (dimensionService.getSize(dimensionServiceKey) == null) {
-                dimensionService.setSize(dimensionServiceKey, new Dimension(750, 500));
-            }
-
-            SingleConfigurableEditor editor = new SingleConfigurableEditor(form.panel, configManager, dimensionServiceKey);
-            editor.show();
+            ShowSettingsUtil.getInstance().showAndSelect(null, NginxConfigurationManager.class);
 
             resetEditorFrom(config);
 

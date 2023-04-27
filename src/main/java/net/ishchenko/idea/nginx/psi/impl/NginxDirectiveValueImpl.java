@@ -16,14 +16,14 @@
 
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.path.FileReferenceSet;
 import net.ishchenko.idea.nginx.annotator.NginxElementVisitor;
 import net.ishchenko.idea.nginx.psi.NginxDirective;
 import net.ishchenko.idea.nginx.psi.NginxDirectiveValue;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -43,7 +43,7 @@ public class NginxDirectiveValueImpl extends NginxElementImpl implements NginxDi
 
 
     @Override
-    public void accept(@NotNull PsiElementVisitor visitor) {
+    public void accept(@Nonnull PsiElementVisitor visitor) {
         if (visitor instanceof NginxElementVisitor) {
             ((NginxElementVisitor) visitor).visitDirectiveValue(this);
         } else {
@@ -51,7 +51,7 @@ public class NginxDirectiveValueImpl extends NginxElementImpl implements NginxDi
         }
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public PsiReference[] getReferences() {
         return new FileReferenceSet(this).getAllReferences();

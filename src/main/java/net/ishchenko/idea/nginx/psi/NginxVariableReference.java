@@ -1,12 +1,14 @@
 package net.ishchenko.idea.nginx.psi;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiReferenceBase;
+import consulo.language.psi.util.PsiTreeUtil;
 import net.ishchenko.idea.nginx.NginxKeywordsManager;
-import net.ishchenko.idea.nginx.psi.NginxContext;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -44,7 +46,7 @@ public class NginxVariableReference extends PsiReferenceBase<PsiElement> impleme
                 .orElse(null);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public Object[] getVariants() {
         return new Object[0];

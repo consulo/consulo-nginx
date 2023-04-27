@@ -1,11 +1,11 @@
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
 import net.ishchenko.idea.nginx.annotator.NginxElementVisitor;
 import net.ishchenko.idea.nginx.psi.NginxComplexValue;
 import net.ishchenko.idea.nginx.psi.NginxDirective;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class NginxComplexValueImpl extends NginxElementImpl implements NginxComplexValue {
 
-    public NginxComplexValueImpl(@NotNull ASTNode node) {
+    public NginxComplexValueImpl(@Nonnull ASTNode node) {
         super(node);
     }
 
@@ -29,7 +29,7 @@ public class NginxComplexValueImpl extends NginxElementImpl implements NginxComp
     }
 
     @Override
-    public void accept(@NotNull PsiElementVisitor visitor) {
+    public void accept(@Nonnull PsiElementVisitor visitor) {
         if (visitor instanceof NginxElementVisitor) {
             ((NginxElementVisitor) visitor).visitComplexValue(this);
         } else {

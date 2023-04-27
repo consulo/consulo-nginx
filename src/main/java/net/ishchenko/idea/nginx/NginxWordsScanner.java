@@ -1,7 +1,7 @@
 package net.ishchenko.idea.nginx;
 
-import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.cacheBuilder.DefaultWordsScanner;
+import consulo.language.ast.TokenSet;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
 import net.ishchenko.idea.nginx.lexer.NginxParsingLexer;
 

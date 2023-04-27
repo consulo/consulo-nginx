@@ -16,7 +16,7 @@
 
 package net.ishchenko.idea.nginx.platform;
 
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.platform.Platform;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 

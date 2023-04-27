@@ -1,7 +1,7 @@
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.execution.filters.RegexpFilter;
-import com.intellij.openapi.project.Project;
+import consulo.execution.ui.console.RegexpFilter;
+import consulo.project.Project;
 
 /**
  * Created by IntelliJ IDEA.

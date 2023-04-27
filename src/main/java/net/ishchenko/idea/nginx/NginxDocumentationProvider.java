@@ -1,18 +1,18 @@
 package net.ishchenko.idea.nginx;
 
-import com.intellij.lang.documentation.DocumentationProvider;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.editor.documentation.LanguageDocumentationProvider;
+import consulo.language.psi.PsiElement;
+import consulo.logging.Logger;
 import net.ishchenko.idea.nginx.psi.NginxDirectiveName;
 import net.ishchenko.idea.nginx.psi.NginxInnerVariable;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,27 +20,10 @@ import java.util.List;
  * Date: 19.08.2009
  * Time: 0:49:41
  */
-public class NginxDocumentationProvider implements DocumentationProvider {
+@ExtensionImpl
+public class NginxDocumentationProvider implements LanguageDocumentationProvider {
 
-    public static final Logger LOG = Logger.getInstance("#com.intellij.lang.documentation.QuickDocumentationProvider");
-
-    @Nullable
-    @Override
-    public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public PsiElement getDocumentationElementForLink(PsiManager psiManager, String link, PsiElement context) {
-        return null;
-    }
+    public static final Logger LOG = Logger.getInstance(NginxDocumentationProvider.class);
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
@@ -111,8 +94,9 @@ public class NginxDocumentationProvider implements DocumentationProvider {
 
     }
 
+    @Nonnull
     @Override
-    public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        return null;
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
     }
 }

@@ -16,7 +16,7 @@
 
 package net.ishchenko.idea.nginx.psi;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * Created by IntelliJ IDEA.

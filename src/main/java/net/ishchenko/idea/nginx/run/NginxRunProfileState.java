@@ -16,19 +16,19 @@
 
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.ConfigurationPerRunnerSettings;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.execution.filters.TextConsoleBuilder;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
+import consulo.process.ExecutionException;
+import consulo.execution.ExecutionResult;
+import consulo.execution.executor.Executor;
+import consulo.execution.configuration.ConfigurationPerRunnerSettings;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.ui.console.TextConsoleBuilder;
+import consulo.execution.ui.console.TextConsoleBuilderFactory;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.runner.ProgramRunner;
+import consulo.execution.ui.console.ConsoleView;
+import consulo.project.Project;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -46,10 +46,9 @@ public class NginxRunProfileState implements RunProfileState {
         this.project = project;
     }
 
-    public ExecutionResult execute(Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
+    public ExecutionResult execute(Executor executor, @Nonnull ProgramRunner runner) throws ExecutionException {
 
         NginxProcessHandler handler = NginxProcessHandler.create((NginxRunConfiguration) environment.getRunProfile());
-
         TextConsoleBuilder builder = TextConsoleBuilderFactory.getInstance().createBuilder(project);
         final ConsoleView console = builder != null ? builder.getConsole() : null;
         if (console != null) {
@@ -57,7 +56,7 @@ public class NginxRunProfileState implements RunProfileState {
             console.attachToProcess(handler);
             handler.setConsole(console);
         }
-
+        handler.startNotify();
         return new NginxExecutionResult(console, handler);
 
     }

@@ -16,9 +16,10 @@
 
 package net.ishchenko.idea.nginx.psi;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
+import consulo.document.util.TextRange;
+import consulo.language.psi.path.FileReference;
+import consulo.language.psi.path.FileReferenceSet;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,7 +34,7 @@ public class NginxFileReference extends FileReference {
         super(fileReference);
     }
 
-    public NginxFileReference(@org.jetbrains.annotations.NotNull FileReferenceSet fileReferenceSet, TextRange textRange, int i, String s) {
+    public NginxFileReference(@Nonnull FileReferenceSet fileReferenceSet, TextRange textRange, int i, String s) {
         super(fileReferenceSet, textRange, i, s);
     }
 

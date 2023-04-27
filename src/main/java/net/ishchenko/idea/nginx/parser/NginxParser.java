@@ -16,14 +16,14 @@
 
 package net.ishchenko.idea.nginx.parser;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.PsiParser;
-import com.intellij.psi.tree.IElementType;
-import consulo.lang.LanguageVersion;
+import consulo.language.ast.ASTNode;
+import consulo.language.parser.PsiBuilder;
+import consulo.language.parser.PsiParser;
+import consulo.language.ast.IElementType;
+import consulo.language.version.LanguageVersion;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 public class NginxParser implements PsiParser {
 
 
-    @NotNull
+    @Nonnull
     public ASTNode parse(IElementType root, PsiBuilder builder, LanguageVersion languageVersion) {
 
         final PsiBuilder.Marker rootMarker = builder.mark();

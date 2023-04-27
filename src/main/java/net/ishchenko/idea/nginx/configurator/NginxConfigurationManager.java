@@ -16,13 +16,18 @@
 
 package net.ishchenko.idea.nginx.configurator;
 
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.configurable.ApplicationConfigurable;
+import consulo.configurable.ConfigurationException;
 import consulo.disposer.Disposable;
 import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import net.ishchenko.idea.nginx.NginxBundle;
 import org.jetbrains.annotations.Nls;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 /**
@@ -31,26 +36,32 @@ import javax.swing.*;
  * Date: 21.07.2009
  * Time: 15:10:16
  */
-public class NginxConfigurationManager implements Configurable  {
+@ExtensionImpl
+public class NginxConfigurationManager implements ApplicationConfigurable {
 
-    private NginxServersConfiguration configuration;
+    private Provider<NginxServersConfiguration> configurationProvider;
     private NginxConfigurationPanel panel;
 
-    public NginxConfigurationManager(NginxServersConfiguration configuration) {
-        this.configuration = configuration;
+    @Inject
+    public NginxConfigurationManager(Provider<NginxServersConfiguration> configurationProvider) {
+        this.configurationProvider = configurationProvider;
     }
 
-    public NginxServersConfiguration getConfiguration() {
-        return configuration;
+    @Nonnull
+    @Override
+    public String getId() {
+        return "nginx.servers";
+    }
+
+    @Nullable
+    @Override
+    public String getParentId() {
+        return "execution";
     }
 
     @Nls
     public String getDisplayName() {
         return NginxBundle.message("config.title");
-    }
-
-    public String getHelpTopic() {
-        return null;
     }
 
     @RequiredUIAccess
@@ -75,7 +86,7 @@ public class NginxConfigurationManager implements Configurable  {
     @Override
     public JComponent createComponent(Disposable disposable) {
         if (panel == null) {
-            panel = new NginxConfigurationPanel(configuration);
+            panel = new NginxConfigurationPanel(configurationProvider.get());
         }
         return panel.getPanel();
     }

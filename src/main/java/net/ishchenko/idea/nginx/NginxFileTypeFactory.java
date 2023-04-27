@@ -6,18 +6,20 @@
  */
 package net.ishchenko.idea.nginx;
 
-import org.jetbrains.annotations.NotNull;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.virtualFileSystem.fileType.FileTypeConsumer;
+import consulo.virtualFileSystem.fileType.FileTypeFactory;
 
-import com.intellij.openapi.fileTypes.FileTypeConsumer;
-import com.intellij.openapi.fileTypes.FileTypeFactory;
+import javax.annotation.Nonnull;
 
 /**
  * @author andrii.borovyk 08/28/2020
  */
+@ExtensionImpl
 public class NginxFileTypeFactory extends FileTypeFactory {
 
     @Override
-    public void createFileTypes(@NotNull FileTypeConsumer consumer) {
+    public void createFileTypes(@Nonnull FileTypeConsumer consumer) {
         consumer.consume(NginxFileType.INSTANCE);
     }
 }

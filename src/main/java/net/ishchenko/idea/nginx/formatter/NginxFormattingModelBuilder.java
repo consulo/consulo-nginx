@@ -16,14 +16,16 @@
 
 package net.ishchenko.idea.nginx.formatter;
 
-import com.intellij.formatting.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import net.ishchenko.idea.nginx.NginxLanguage;
 import net.ishchenko.idea.nginx.formatter.blocks.NginxBlock;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,23 +33,25 @@ import org.jetbrains.annotations.NotNull;
  * Date: 13.07.2009
  * Time: 22:51:23
  */
+@ExtensionImpl
 public class NginxFormattingModelBuilder implements FormattingModelBuilder {
 
-    @NotNull
-    public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
-
+    @Nonnull
+    @Override
+    public FormattingModel createModel(@Nonnull FormattingContext formattingContext) {
+        PsiElement element = formattingContext.getPsiElement();
         ASTNode node = element.getNode();
         assert node != null;
         PsiFile containingFile = element.getContainingFile();
         ASTNode astNode = containingFile.getNode();
         assert astNode != null;
 
-        return FormattingModelProvider.createFormattingModelForPsiFile(containingFile, new NginxBlock(node, Indent.getAbsoluteNoneIndent(), null), settings);
-
+        return FormattingModelProvider.createFormattingModelForPsiFile(containingFile, new NginxBlock(node, Indent.getAbsoluteNoneIndent(), null), formattingContext.getCodeStyleSettings());
     }
 
-    public TextRange getRangeAffectingIndent(PsiFile file, int offset, ASTNode elementAtOffset) {
-        return null;
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
     }
-
 }

@@ -16,12 +16,12 @@
 
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.extapi.psi.PsiFileBase;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.psi.FileViewProvider;
+import consulo.language.impl.psi.PsiFileBase;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.file.FileViewProvider;
 import net.ishchenko.idea.nginx.NginxFileType;
 import net.ishchenko.idea.nginx.psi.NginxPsiFile;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,7 +35,7 @@ public class NginxPsiFileImpl extends PsiFileBase implements NginxPsiFile {
         super(viewProvider, NginxFileType.getInstance().getLanguage());
     }
 
-    @NotNull
+    @Nonnull
     public FileType getFileType() {
         return NginxFileType.getInstance();
     }

@@ -16,13 +16,14 @@
 
 package net.ishchenko.idea.nginx.platform;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import consulo.util.lang.StringUtil;
 import net.ishchenko.idea.nginx.NginxBundle;
 
 /**

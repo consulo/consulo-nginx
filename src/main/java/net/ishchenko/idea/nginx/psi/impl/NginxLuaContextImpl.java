@@ -1,8 +1,8 @@
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.LiteralTextEscaper;
-import com.intellij.psi.PsiLanguageInjectionHost;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.LiteralTextEscaper;
+import consulo.language.psi.PsiLanguageInjectionHost;
 import net.ishchenko.idea.nginx.NginxKeywordsManager;
 import net.ishchenko.idea.nginx.injection.LuaTextEscaper;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
@@ -10,8 +10,8 @@ import net.ishchenko.idea.nginx.psi.NginxComplexValue;
 import net.ishchenko.idea.nginx.psi.NginxContext;
 import net.ishchenko.idea.nginx.psi.NginxDirectiveName;
 import net.ishchenko.idea.nginx.psi.NginxLuaContext;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 import static net.ishchenko.idea.nginx.psi.impl.NginxDirectiveImpl.DIRECTIVE_VALUE_TOKENS;
 
 public class NginxLuaContextImpl extends NginxElementImpl implements NginxLuaContext {
-    public NginxLuaContextImpl(@NotNull ASTNode node) {
+    public NginxLuaContextImpl(@Nonnull ASTNode node) {
         super(node);
     }
 
@@ -29,23 +29,23 @@ public class NginxLuaContextImpl extends NginxElementImpl implements NginxLuaCon
     }
 
     @Override
-    public PsiLanguageInjectionHost updateText(@NotNull String text) {
+    public PsiLanguageInjectionHost updateText(@Nonnull String text) {
         return null;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public LiteralTextEscaper<? extends PsiLanguageInjectionHost> createLiteralTextEscaper() {
         return new LuaTextEscaper(this);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getNameString() {
         return getText();
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public NginxDirectiveName getDirectiveName() {
         // TODO don't extend NginxDirectiveName
@@ -70,7 +70,7 @@ public class NginxLuaContextImpl extends NginxElementImpl implements NginxLuaCon
         }
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public List<NginxComplexValue> getValues() {
         ArrayList<NginxComplexValue> result = new ArrayList<>();

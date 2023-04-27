@@ -73,7 +73,7 @@
               <text value=""/>
             </properties>
           </component>
-          <component id="563ab" class="com.intellij.openapi.ui.ComponentWithBrowseButton" binding="executableField" custom-create="true">
+          <component id="563ab" class="consulo.ui.ex.awt.ComponentWithBrowseButton" binding="executableField" custom-create="true">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -81,7 +81,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="7be39" class="com.intellij.openapi.ui.ComponentWithBrowseButton" binding="configurationField" custom-create="true">
+          <component id="7be39" class="consulo.ui.ex.awt.ComponentWithBrowseButton" binding="configurationField" custom-create="true">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -97,7 +97,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="55197" class="com.intellij.openapi.ui.ComponentWithBrowseButton" binding="pidField" custom-create="true">
+          <component id="55197" class="consulo.ui.ex.awt.ComponentWithBrowseButton" binding="pidField" custom-create="true">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>

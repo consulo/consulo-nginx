@@ -16,11 +16,11 @@
 
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.ui.ExecutionConsole;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
+import consulo.execution.ExecutionResult;
+import consulo.process.ProcessHandler;
+import consulo.execution.ui.ExecutionConsole;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
 
 /**
  * Created by IntelliJ IDEA.

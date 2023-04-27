@@ -1,7 +1,7 @@
 <consulo-plugin url="https://github.com/consulo/consulo-nginx">
     <id>consulo.nginx</id>
     <name>nginx Support</name>
-    <vendor url="https://github.com/ishchenko/idea-nginx">Max Ishchenko</vendor>
+    <vendor>Max Ishchenko</vendor>
     <version>SNAPSHOT</version>
     <description>
         <![CDATA[
@@ -20,43 +20,4 @@
     </tags>
 
     <resource-bundle>net.ishchenko.idea.nginx.NginxBundle</resource-bundle>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <lang.parserDefinition language="nginx"
-                               implementationClass="net.ishchenko.idea.nginx.parser.NginxParserDefinition"/>
-        <lang.commenter language="nginx" implementationClass="net.ishchenko.idea.nginx.NginxCommenter"/>
-        <lang.braceMatcher language="nginx" implementationClass="net.ishchenko.idea.nginx.NginxBraceMatcher"/>
-        <lang.foldingBuilder language="nginx" implementationClass="net.ishchenko.idea.nginx.NginxFoldingBuilder"/>
-        <lang.documentationProvider language="nginx"
-                                    implementationClass="net.ishchenko.idea.nginx.NginxDocumentationProvider"/>
-        <lang.formatter language="nginx"
-                        implementationClass="net.ishchenko.idea.nginx.formatter.NginxFormattingModelBuilder"/>
-        <lang.elementManipulator forClass="net.ishchenko.idea.nginx.psi.impl.NginxDirectiveValueImpl"
-                                 implementationClass="net.ishchenko.idea.nginx.psi.impl.NginxDirectiveValueManipulator"/>
-        <annotator language="nginx" implementationClass="net.ishchenko.idea.nginx.annotator.NginxAnnotatingVisitor"/>
-        <configurationType implementation="net.ishchenko.idea.nginx.run.NginxConfigurationType"/>
-        <completion.contributor language="nginx"
-                                implementationClass="net.ishchenko.idea.nginx.NginxCompletionContributor"/>
-        <gotoFileContributor implementation="net.ishchenko.idea.nginx.NginxChooseByNameContributor"/>
-        <programRunner implementation="net.ishchenko.idea.nginx.run.NginxRunner"/>
-        <fileTypeFactory implementation="net.ishchenko.idea.nginx.NginxFileTypeFactory"/>
-        <languageInjector implementation="net.ishchenko.idea.nginx.injection.LuaInjector"/>
-        <lang.findUsagesProvider language="nginx"
-                                 implementationClass="net.ishchenko.idea.nginx.NginxFindUsagesProvider"/>
-
-        <lang.syntaxHighlighterFactory language="nginx"
-                                       implementationClass="consulo.nginx.NginxSyntaxHighlighterFactory"/>
-
-        <applicationService serviceImplementation="net.ishchenko.idea.nginx.configurator.NginxServersConfiguration"/>
-        <applicationService serviceImplementation="net.ishchenko.idea.nginx.NginxKeywordsManager" />
-        <applicationConfigurable id="nginx.servers" parentId="execution" displayName="Nginx"
-                                 instance="net.ishchenko.idea.nginx.configurator.NginxConfigurationManager"/>
-    </extensions>
-
-    <actions>
-        <action id="nginx.reload" class="net.ishchenko.idea.nginx.run.NginxReloadAction"
-                text="Reload nginx configuration files" description="Reloads nginx configuration files"
-                icon="consulo.platform.base.PlatformIconGroup@actions.refresh"/>
-    </actions>
-
 </consulo-plugin>

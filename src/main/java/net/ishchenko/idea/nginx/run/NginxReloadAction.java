@@ -16,28 +16,34 @@
 
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.execution.ExecutionManager;
-import com.intellij.execution.process.*;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.annotation.component.ActionImpl;
+import consulo.document.FileDocumentManager;
+import consulo.execution.ExecutionDataKeys;
+import consulo.execution.ExecutionManager;
+import consulo.execution.ui.RunContentDescriptor;
+import consulo.execution.ui.console.ConsoleView;
+import consulo.execution.ui.console.ConsoleViewContentType;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessHandlerBuilder;
+import consulo.process.ProcessOutputTypes;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.dataholder.Key;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,7 +51,11 @@ import java.io.IOException;
  * Date: 25.07.2009
  * Time: 4:15:37
  */
+@ActionImpl(id = "nginx.reload")
 public class NginxReloadAction extends AnAction {
+    public NginxReloadAction() {
+        super("Reload nginx configuration files", "Reloads nginx configuration files", PlatformIconGroup.actionsRefresh());
+    }
 
     public void actionPerformed(final AnActionEvent event) {
 
@@ -82,8 +92,6 @@ public class NginxReloadAction extends AnAction {
             }
 
         }
-
-
     }
 
     private void validateDescriptor(NginxServerDescriptor descriptor) throws ReloadException {
@@ -95,7 +103,7 @@ public class NginxReloadAction extends AnAction {
 
     }
 
-    private void testConfig(final NginxServerDescriptor descriptor, final ConsoleView console, Project project) throws ReloadException, IOException {
+    private void testConfig(final NginxServerDescriptor descriptor, final ConsoleView console, Project project) throws ReloadException, ExecutionException {
 
         VirtualFile executableFile = LocalFileSystem.getInstance().findFileByPath(descriptor.getExecutablePath());
         PlatformDependentTools pdt = PlatformDependentTools.getInstance();
@@ -108,7 +116,7 @@ public class NginxReloadAction extends AnAction {
 
     }
 
-    private void doReload(NginxServerDescriptor descriptor, ConsoleView console, Project project) throws ReloadException, IOException {
+    private void doReload(NginxServerDescriptor descriptor, ConsoleView console, Project project) throws ReloadException, ExecutionException {
 
         VirtualFile executableFile = LocalFileSystem.getInstance().findFileByPath(descriptor.getExecutablePath());
         PlatformDependentTools pdt = PlatformDependentTools.getInstance();
@@ -121,11 +129,8 @@ public class NginxReloadAction extends AnAction {
 
     }
 
-    private int runAndGetExitValue(String[] testCommand, File dir, final ConsoleView console) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.command(testCommand);
-        builder.directory(dir);
-        OSProcessHandler osph = new OSProcessHandler(builder.start(), StringUtil.join(testCommand, " "));
+    private int runAndGetExitValue(String[] testCommand, File dir, final ConsoleView console) throws ExecutionException {
+        ProcessHandler osph = ProcessHandlerBuilder.create(new GeneralCommandLine(testCommand).withWorkDirectory(dir)).build();
         osph.addProcessListener(new ProcessAdapter() {
             @Override
             public void onTextAvailable(final ProcessEvent event, Key outputType) {
@@ -139,7 +144,7 @@ public class NginxReloadAction extends AnAction {
         osph.startNotify();
         osph.waitFor();
         osph.destroyProcess(); //is that needed if waitFor has returned?
-        return osph.getProcess().exitValue();
+        return osph.getExitCode();
     }
 
 
@@ -157,7 +162,7 @@ public class NginxReloadAction extends AnAction {
     private RunContentDescriptor getRunContentDescriptor(AnActionEvent e) {
 
         //magic copied from com.intellij.execution.actions.StopAction
-        RunContentDescriptor runContentDescriptor = e.getData(LangDataKeys.RUN_CONTENT_DESCRIPTOR);
+        RunContentDescriptor runContentDescriptor = e.getData(ExecutionDataKeys.RUN_CONTENT_DESCRIPTOR);
         if (runContentDescriptor == null) {
             Project project = e.getData(PlatformDataKeys.PROJECT);
             if (project != null) {

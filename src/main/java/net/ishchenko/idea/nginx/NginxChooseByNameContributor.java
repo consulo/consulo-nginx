@@ -16,13 +16,15 @@
 
 package net.ishchenko.idea.nginx;
 
-import com.intellij.navigation.ChooseByNameContributor;
-import com.intellij.navigation.NavigationItem;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.navigation.GotoFileContributor;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.navigation.NavigationItem;
+import consulo.project.Project;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import jakarta.inject.Inject;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
 
 import java.util.ArrayList;
@@ -36,12 +38,14 @@ import java.util.Set;
  * Date: 21.07.2009
  * Time: 18:29:04
  */
-public class NginxChooseByNameContributor implements ChooseByNameContributor {
+@ExtensionImpl
+public class NginxChooseByNameContributor implements GotoFileContributor {
 
     private NginxServersConfiguration configuration;
 
-    public NginxChooseByNameContributor() {
-        this.configuration = NginxServersConfiguration.getInstance();
+    @Inject
+    public NginxChooseByNameContributor(NginxServersConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {

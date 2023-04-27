@@ -16,12 +16,12 @@
 
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
 import net.ishchenko.idea.nginx.annotator.NginxElementVisitor;
 import net.ishchenko.idea.nginx.psi.NginxContext;
 import net.ishchenko.idea.nginx.psi.NginxDirective;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,7 +40,7 @@ public class NginxContextImpl extends NginxElementImpl implements NginxContext {
     }
 
     @Override
-    public void accept(@NotNull PsiElementVisitor visitor) {
+    public void accept(@Nonnull PsiElementVisitor visitor) {
         if (visitor instanceof NginxElementVisitor) {
             ((NginxElementVisitor) visitor).visitContext(this);
         } else {

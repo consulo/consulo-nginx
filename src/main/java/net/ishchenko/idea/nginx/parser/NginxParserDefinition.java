@@ -16,25 +16,27 @@
 
 package net.ishchenko.idea.nginx.parser;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LanguageUtil;
-import com.intellij.lang.ParserDefinition;
-import com.intellij.lang.PsiParser;
-import com.intellij.lexer.Lexer;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.IFileElementType;
-import com.intellij.psi.tree.TokenSet;
-import consulo.lang.LanguageVersion;
-import consulo.lang.util.LanguageVersionUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.impl.psi.ASTWrapperPsiElement;
+import consulo.language.ast.ASTNode;
+import consulo.language.util.LanguageUtil;
+import consulo.language.parser.ParserDefinition;
+import consulo.language.parser.PsiParser;
+import consulo.language.lexer.Lexer;
+import consulo.language.file.FileViewProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.IFileElementType;
+import consulo.language.ast.TokenSet;
+import consulo.language.version.LanguageVersion;
+import consulo.language.version.LanguageVersionUtil;
 import net.ishchenko.idea.nginx.NginxLanguage;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
 import net.ishchenko.idea.nginx.lexer.NginxParsingLexer;
 import net.ishchenko.idea.nginx.psi.impl.*;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,8 +44,15 @@ import org.jetbrains.annotations.NotNull;
  * Date: 04.07.2009
  * Time: 14:39:39
  */
+@ExtensionImpl
 public class NginxParserDefinition implements ParserDefinition {
-    @NotNull
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return NginxLanguage.INSTANCE;
+    }
+
+    @Nonnull
     public Lexer createLexer(LanguageVersion languageVersion) {
         return new NginxParsingLexer();
     }
@@ -56,22 +65,22 @@ public class NginxParserDefinition implements ParserDefinition {
         return NginxElementTypes.FILE;
     }
 
-    @NotNull
+    @Nonnull
     public TokenSet getWhitespaceTokens(LanguageVersion languageVersion) {
         return NginxElementTypes.WHITE_SPACES;
     }
 
-    @NotNull
+    @Nonnull
     public TokenSet getCommentTokens(LanguageVersion languageVersion) {
         return NginxElementTypes.COMMENTS;
     }
 
-    @NotNull
+    @Nonnull
     public TokenSet getStringLiteralElements(LanguageVersion languageVersion) {
         return NginxElementTypes.STRINGS;
     }
 
-    @NotNull
+    @Nonnull
     public PsiElement createElement(ASTNode node) {
         IElementType type = node.getElementType();
         if (type == NginxElementTypes.DIRECTIVE) {

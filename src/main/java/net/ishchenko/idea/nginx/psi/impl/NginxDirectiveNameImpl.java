@@ -16,15 +16,16 @@
 
 package net.ishchenko.idea.nginx.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.util.IncorrectOperationException;
 import net.ishchenko.idea.nginx.annotator.NginxElementVisitor;
 import net.ishchenko.idea.nginx.psi.NginxDirective;
 import net.ishchenko.idea.nginx.psi.NginxDirectiveName;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,7 +40,7 @@ public class NginxDirectiveNameImpl extends NginxElementImpl implements NginxDir
     }
 
     @Override
-    public void accept(@NotNull PsiElementVisitor visitor) {
+    public void accept(@Nonnull PsiElementVisitor visitor) {
         if (visitor instanceof NginxElementVisitor) {
             ((NginxElementVisitor) visitor).visitDirectiveName(this);
         } else {

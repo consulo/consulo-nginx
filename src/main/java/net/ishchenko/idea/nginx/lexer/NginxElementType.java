@@ -16,9 +16,9 @@
 
 package net.ishchenko.idea.nginx.lexer;
 
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import net.ishchenko.idea.nginx.NginxLanguage;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class NginxElementType extends IElementType {
 
-    public NginxElementType(@NotNull String s) {
+    public NginxElementType(@Nonnull String s) {
         super(s, NginxLanguage.INSTANCE);
     }
 

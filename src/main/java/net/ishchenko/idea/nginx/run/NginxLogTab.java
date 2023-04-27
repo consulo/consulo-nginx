@@ -1,20 +1,20 @@
 package net.ishchenko.idea.nginx.run;
 
-import com.intellij.diagnostic.logging.AdditionalTabComponent;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
+import consulo.application.ApplicationManager;
+import consulo.execution.configuration.log.ui.AdditionalTabComponent;
+import consulo.execution.ui.console.ConsoleView;
+import consulo.execution.ui.console.TextConsoleBuilderFactory;
+import consulo.logging.Logger;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessOutputTypes;
+import consulo.project.Project;
+import consulo.ui.ex.action.ActionGroup;
+import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.util.dataholder.Key;
-import org.jetbrains.annotations.NotNull;
+import consulo.util.io.FileUtil;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -31,7 +31,7 @@ import java.io.*;
  */
 public class NginxLogTab extends AdditionalTabComponent {
 
-    private static final Logger logger = Logger.getInstance("net.ishchenko.idea.nginx.run.NginxLogTab");
+    private static final Logger logger = Logger.getInstance(NginxLogTab.class);
 
     private final LightProcessHandler processHandler = new LightProcessHandler();
     private ConsoleView console;
@@ -61,7 +61,7 @@ public class NginxLogTab extends AdditionalTabComponent {
         return file.getName();
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public JComponent getComponent() {
         if (!stuffAdded) {
