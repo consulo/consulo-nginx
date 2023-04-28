@@ -19,18 +19,22 @@ package net.ishchenko.idea.nginx.configurator;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
-import consulo.disposer.Disposable;
 import consulo.application.Application;
-import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkAdditionalData;
+import consulo.content.bundle.SdkTable;
+import consulo.content.bundle.event.SdkTableListener;
+import consulo.disposer.Disposable;
+import consulo.nginx.bundle.NginxBundleType;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.util.xml.serializer.XmlSerializer;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.jdom.Element;
-import javax.annotation.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -43,8 +47,7 @@ import java.util.*;
 @State(name = "nginxServers", storages = @Storage("nginx.xml"))
 @ServiceAPI(ComponentScope.APPLICATION)
 @ServiceImpl
-public class NginxServersConfiguration implements PersistentStateComponent<Element>, Disposable {
-    private Set<NginxServerDescriptor> descriptors = new LinkedHashSet<>();
+public class NginxServersConfiguration implements Disposable {
     private NginxServerDescriptor[] cachedDescriptors = null;
     private Map<String, Set<String>> cachedNameToPathsMapping;
     private Set<String> cachedFilepaths;
@@ -53,7 +56,38 @@ public class NginxServersConfiguration implements PersistentStateComponent<Eleme
         return Application.get().getInstance(NginxServersConfiguration.class);
     }
 
+    @Inject
+    public NginxServersConfiguration(Application application) {
+        application.getMessageBus().connect(this).subscribe(SdkTableListener.class, new SdkTableListener() {
+            @Override
+            public void sdkAdded(@Nonnull Sdk sdk) {
+                sdksChanged();
+            }
+
+            @Override
+            public void sdkRemoved(@Nonnull Sdk sdk) {
+                sdksChanged();
+            }
+
+            private void sdksChanged() {
+                cachedDescriptors = null;
+                cachedNameToPathsMapping = null;
+                cachedFilepaths = null;
+            }
+        });
+    }
+
     public synchronized NginxServerDescriptor[] getServersDescriptors() {
+        List<NginxServerDescriptor> descriptors = new ArrayList<>();
+
+        List<Sdk> sdks = SdkTable.getInstance().getSdksOfType(NginxBundleType.getInstance());
+        for (Sdk sdk : sdks) {
+            SdkAdditionalData sdkAdditionalData = sdk.getSdkAdditionalData();
+            if (sdkAdditionalData instanceof NginxServerDescriptor nginxServerDescriptor) {
+                descriptors.add(nginxServerDescriptor);
+            }
+        }
+
         if (cachedDescriptors == null) {
             cachedDescriptors = descriptors.toArray(new NginxServerDescriptor[descriptors.size()]);
             cachedNameToPathsMapping = extractNameToPaths();
@@ -62,49 +96,20 @@ public class NginxServersConfiguration implements PersistentStateComponent<Eleme
         return cachedDescriptors;
     }
 
-    public synchronized void addServerDescriptor(NginxServerDescriptor descriptor) {
-        descriptors.add(descriptor);
-        cachedDescriptors = null;
-        cachedNameToPathsMapping = null;
-        cachedFilepaths = null;
-    }
-
-    public synchronized void removeAllServerDescriptors() {
-        descriptors.clear();
-        cachedDescriptors = null;
-        cachedNameToPathsMapping = null;
-        cachedFilepaths = null;
-    }
-
     @Override
     public void dispose() {
 
     }
 
-    @Override
-    public synchronized Element getState() {
-        Element element = new Element("servers");
-        for (final NginxServerDescriptor description : getServersDescriptors()) {
-            element.addContent(XmlSerializer.serialize(description));
-        }
-        return element;
-    }
-
-    @Override
-    public synchronized void loadState(final Element state) {
-        removeAllServerDescriptors();
-        for (final Object o : state.getChildren()) {
-            Element element = (Element) o;
-            addServerDescriptor(XmlSerializer.deserialize(element, NginxServerDescriptor.class));
-        }
-    }
-
     @Nullable
-    public synchronized NginxServerDescriptor getDescriptorById(String id) {
-        for (NginxServerDescriptor descriptor : descriptors) {
-            if (descriptor.getId().equals(id)) {
-                return descriptor;
-            }
+    public NginxServerDescriptor getDescriptorById(String id) {
+        Sdk sdk = SdkTable.getInstance().findSdk(id);
+        if (sdk == null) {
+            return null;
+        }
+        SdkAdditionalData sdkAdditionalData = sdk.getSdkAdditionalData();
+        if (sdkAdditionalData instanceof NginxServerDescriptor nginxServerDescriptor) {
+            return nginxServerDescriptor;
         }
         return null;
     }

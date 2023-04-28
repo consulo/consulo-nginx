@@ -69,7 +69,7 @@ public class WindowsSpecificTools implements PlatformDependentTools {
 
     public NginxServerDescriptor createDescriptorFromFile(VirtualFile file) throws ThisIsNotNginxExecutableException {
 
-        NginxCompileParameters compileParameters = NginxCompileParametersExtractor.extract(file);
+        NginxCompileParameters compileParameters = NginxCompileParametersExtractor.extract(file.getPath());
 
         NginxServerDescriptor descriptor = getDefaultDescriptorFromFile(file);
         descriptor.setName("nginx/Windows [" + compileParameters.getVersion() + "]");

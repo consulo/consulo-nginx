@@ -17,11 +17,13 @@
 package net.ishchenko.idea.nginx.run;
 
 import consulo.configurable.ConfigurationException;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTable;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.ide.setting.ShowSettingsUtil;
-import net.ishchenko.idea.nginx.configurator.NginxConfigurationManager;
+import consulo.nginx.bundle.NginxBundleType;
+import consulo.project.Project;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
-import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -33,11 +35,12 @@ import javax.swing.*;
  * Time: 19:29:20
  */
 public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration> {
-
+    private Project project;
     private NginxRunConfiguration config;
     private Mediator mediator;
 
-    public NginxRunSettingsEditor(NginxRunConfiguration config) {
+    public NginxRunSettingsEditor(NginxRunConfiguration config, Project project) {
+        this.project = project;
         this.config = config;
         this.mediator = new Mediator();
     }
@@ -64,7 +67,9 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
         NginxRunSettingsForm form;
 
         void showServerManagerDialog() {
-            ShowSettingsUtil.getInstance().showAndSelect(null, NginxConfigurationManager.class);
+            ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
+                projectStructureSelector.select((Sdk) null, true);
+            });
 
             resetEditorFrom(config);
 
@@ -72,8 +77,8 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
 
         public void applyEditorTo(NginxRunConfiguration s) {
             if (form.serverCombo.getSelectedItem() != null) {
-                NginxServerDescriptor descriptor = (NginxServerDescriptor) form.serverCombo.getSelectedItem();
-                s.setServerDescriptorId(descriptor.getId());
+                Sdk descriptor = (Sdk) form.serverCombo.getSelectedItem();
+                s.setServerDescriptorId(descriptor.getName());
                 s.setShowHttpLog(mediator.form.showHttpLogCheckBox.isSelected());
                 s.setHttpLogPath(mediator.form.httpLogPathField.getText());
                 s.setShowErrorLog(mediator.form.showErrorLogCheckBox.isSelected());
@@ -81,7 +86,8 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
             }
         }
 
-        public void onChooseDescriptor(NginxServerDescriptor descriptor) {
+        public void onChooseDescriptor(Sdk sdk) {
+            NginxServerDescriptor descriptor = sdk == null  ? null : (NginxServerDescriptor) sdk.getSdkAdditionalData();
             if (descriptor != null) {
                 form.executableField.setText(descriptor.getExecutablePath());
                 form.configurationField.setText(descriptor.getConfigPath());
@@ -110,14 +116,12 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
         public void resetEditorFrom(NginxRunConfiguration configuration) {
             DefaultComboBoxModel model = (DefaultComboBoxModel) form.serverCombo.getModel();
             model.removeAllElements();
-            NginxServersConfiguration servers = NginxServersConfiguration.getInstance();
-            for (NginxServerDescriptor descriptor : servers.getServersDescriptors()) {
+            for (Sdk descriptor : SdkTable.getInstance().getSdksOfType(NginxBundleType.getInstance())) {
                 model.addElement(descriptor);
             }
             String chosenDescriptorId = configuration.getServerDescriptorId();
             if (chosenDescriptorId != null) {
-                NginxServersConfiguration serversConfig = NginxServersConfiguration.getInstance();
-                NginxServerDescriptor descriptor = serversConfig.getDescriptorById(chosenDescriptorId);
+                Sdk descriptor = SdkTable.getInstance().findSdk(chosenDescriptorId);
                 if (descriptor != null) {
                     model.setSelectedItem(descriptor);
                 } else {

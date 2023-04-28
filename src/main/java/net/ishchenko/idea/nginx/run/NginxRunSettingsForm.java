@@ -16,15 +16,14 @@
 
 package net.ishchenko.idea.nginx.run;
 
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkUtil;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
-import consulo.nginx.icon.NginxIconGroup;
 import net.ishchenko.idea.nginx.NginxBundle;
-import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
-import java.awt.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,91 +32,93 @@ import java.awt.*;
  * Time: 18:00:55
  */
 public class NginxRunSettingsForm {
+    JComboBox<Sdk> serverCombo;
+    JTextField executableField;
+    JTextField configurationField;
+    JButton configureButton;
+    JPanel panel;
+    JTextField globalsField;
+    JTextField pidField;
+    JCheckBox showHttpLogCheckBox;
+    JTextField httpLogPathField;
+    JCheckBox showErrorLogCheckBox;
+    JTextField errorLogPathField;
+    private JLabel explanationLabel;
 
-  JComboBox serverCombo;
-  JTextField executableField;
-  JTextField configurationField;
-  JButton configureButton;
-  JPanel panel;
-  JTextField globalsField;
-  JTextField pidField;
-  JCheckBox showHttpLogCheckBox;
-  JTextField httpLogPathField;
-  JCheckBox showErrorLogCheckBox;
-  JTextField errorLogPathField;
-  private JLabel explanationLabel;
+    public NginxRunSettingsForm(final NginxRunSettingsEditor.Mediator mediator) {
 
-  public NginxRunSettingsForm(final NginxRunSettingsEditor.Mediator mediator) {
+        mediator.form = this;
 
-    mediator.form = this;
+        serverCombo.setRenderer(new NginxServerComboboxRenderer());
+        serverCombo.addActionListener(e -> mediator.onChooseDescriptor((Sdk) serverCombo.getSelectedItem()));
 
-    serverCombo.setRenderer(new NginxServerComboboxRenderer());
-    serverCombo.addActionListener(e -> mediator.onChooseDescriptor((NginxServerDescriptor) serverCombo.getSelectedItem()));
+        configureButton.addActionListener(
+                e -> mediator.showServerManagerDialog()
+        );
 
-    configureButton.addActionListener(
-        e -> mediator.showServerManagerDialog()
-    );
+        showHttpLogCheckBox.addActionListener(e -> mediator.onHttpLogCheckboxAction());
 
-    showHttpLogCheckBox.addActionListener(e -> mediator.onHttpLogCheckboxAction());
+        showErrorLogCheckBox.addActionListener(e -> mediator.onErrorLogCheckboxAction());
 
-    showErrorLogCheckBox.addActionListener(e -> mediator.onErrorLogCheckboxAction());
+    }
 
-  }
+    public JPanel getPanel() {
+        return panel;
+    }
 
-  public JPanel getPanel() {
-    return panel;
-  }
+    private void createUIComponents() {
+        explanationLabel = new JLabel(NginxBundle.message("run.layoutExplanation"));
+        explanationLabel.setUI(new MultiLineLabelUI());
+    }
 
-  private void createUIComponents() {
-    explanationLabel = new JLabel(NginxBundle.message("run.layoutExplanation"));
-    explanationLabel.setUI(new MultiLineLabelUI());
-  }
-
-
-  /**
-   * @noinspection ALL
-   */
-  private void $$$loadButtonText$$$(AbstractButton component, String text) {
-    StringBuffer result = new StringBuffer();
-    boolean haveMnemonic = false;
-    char mnemonic = '\0';
-    int mnemonicIndex = -1;
-    for (int i = 0; i < text.length(); i++) {
-      if (text.charAt(i) == '&') {
-        i++;
-        if (i == text.length()) break;
-        if (!haveMnemonic && text.charAt(i) != '&') {
-          haveMnemonic = true;
-          mnemonic = text.charAt(i);
-          mnemonicIndex = result.length();
+    /**
+     * @noinspection ALL
+     */
+    private void $$$loadButtonText$$$(AbstractButton component, String text) {
+        StringBuffer result = new StringBuffer();
+        boolean haveMnemonic = false;
+        char mnemonic = '\0';
+        int mnemonicIndex = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '&') {
+                i++;
+                if (i == text.length()) {
+                    break;
+                }
+                if (!haveMnemonic && text.charAt(i) != '&') {
+                    haveMnemonic = true;
+                    mnemonic = text.charAt(i);
+                    mnemonicIndex = result.length();
+                }
+            }
+            result.append(text.charAt(i));
         }
-      }
-      result.append(text.charAt(i));
+        component.setText(result.toString());
+        if (haveMnemonic) {
+            component.setMnemonic(mnemonic);
+            component.setDisplayedMnemonicIndex(mnemonicIndex);
+        }
     }
-    component.setText(result.toString());
-    if (haveMnemonic) {
-      component.setMnemonic(mnemonic);
-      component.setDisplayedMnemonicIndex(mnemonicIndex);
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return panel;
     }
-  }
 
-  /**
-   * @noinspection ALL
-   */
-  public JComponent $$$getRootComponent$$$() {
-    return panel;
-  }
+    private static class NginxServerComboboxRenderer extends ColoredListCellRenderer<Sdk> {
 
-  private static class NginxServerComboboxRenderer extends BasicComboBoxRenderer {
 
-    @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-      BasicComboBoxRenderer result = (BasicComboBoxRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-      if (value != null) {
-        result.setIcon(TargetAWT.to(NginxIconGroup.nginx()));
-        result.setText(((NginxServerDescriptor) value).getName());
-      }
-      return result;
+        @Override
+        protected void customizeCellRenderer(@Nonnull JList<? extends Sdk> jList, Sdk sdk, int i, boolean b, boolean b1) {
+            if (sdk == null) {
+                append("");
+            }
+            else {
+                append(sdk.getName());
+                setIcon(SdkUtil.getIcon(sdk));
+            }
+        }
     }
-  }
 }

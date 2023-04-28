@@ -161,7 +161,7 @@ public class NginxRunConfiguration extends RunConfigurationBase {
     }
 
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new NginxRunSettingsEditor(this);
+        return new NginxRunSettingsEditor(this, getProject());
     }
 
     public ConfigurationPerRunnerSettings createRunnerSettings(ConfigurationInfoProvider provider) {

@@ -16,15 +16,14 @@
 
 package net.ishchenko.idea.nginx.platform;
 
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.lang.StringUtil;
+import net.ishchenko.idea.nginx.NginxBundle;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import consulo.util.lang.StringUtil;
-import net.ishchenko.idea.nginx.NginxBundle;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,14 +41,14 @@ public class NginxCompileParametersExtractor {
      * @throws PlatformDependentTools.ThisIsNotNginxExecutableException if file could not be run, or
      *                                                                  output would not match against expected pattern
      */
-    public static NginxCompileParameters extract(VirtualFile from) throws PlatformDependentTools.ThisIsNotNginxExecutableException {
+    public static NginxCompileParameters extract(String from) throws PlatformDependentTools.ThisIsNotNginxExecutableException {
 
         NginxCompileParameters result = new NginxCompileParameters();
 
         StringBuilder output = new StringBuilder();
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(from.getPath(), "-V");
+            ProcessBuilder pb = new ProcessBuilder(from, "-V");
             Process process = pb.start();
             BufferedReader errorReader = new BufferedReader(
                     new InputStreamReader(process.getErrorStream()));

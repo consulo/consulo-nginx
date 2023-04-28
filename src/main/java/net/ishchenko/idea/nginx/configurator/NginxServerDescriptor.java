@@ -23,15 +23,16 @@ package net.ishchenko.idea.nginx.configurator;
  * Time: 15:29:24
  */
 
+import consulo.content.bundle.SdkAdditionalData;
+
 import java.util.Objects;
 
 /**
  * Server descriptor that is created in "nginx Configuration files" menu.
  * All paths are absolute.
  */
-public class NginxServerDescriptor implements Cloneable {
+public class NginxServerDescriptor implements SdkAdditionalData, Cloneable {
 
-    private String id;
     private String name = "nginx server";
     private String executablePath = "";
     private String configPath = "";
@@ -41,7 +42,6 @@ public class NginxServerDescriptor implements Cloneable {
     private String errorLogPath = "";
 
     public NginxServerDescriptor() {
-        id = "nginx.descriptor." + System.currentTimeMillis();
     }
 
     public String getConfigPath() {
@@ -66,17 +66,6 @@ public class NginxServerDescriptor implements Cloneable {
 
     public void setGlobals(String globals) {
         this.globals = globals;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Do not remove! Used for deserializing!
-     */
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -113,27 +102,43 @@ public class NginxServerDescriptor implements Cloneable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         NginxServerDescriptor that = (NginxServerDescriptor) o;
 
-        if (!Objects.equals(configPath, that.configPath)) return false;
-        if (!Objects.equals(errorLogPath, that.errorLogPath)) return false;
-        if (!Objects.equals(executablePath, that.executablePath))
+        if (!Objects.equals(configPath, that.configPath)) {
             return false;
-        if (!Objects.equals(globals, that.globals)) return false;
-        if (!Objects.equals(httpLogPath, that.httpLogPath)) return false;
-        if (!Objects.equals(id, that.id)) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        if (!Objects.equals(pidPath, that.pidPath)) return false;
+        }
+        if (!Objects.equals(errorLogPath, that.errorLogPath)) {
+            return false;
+        }
+        if (!Objects.equals(executablePath, that.executablePath)) {
+            return false;
+        }
+        if (!Objects.equals(globals, that.globals)) {
+            return false;
+        }
+        if (!Objects.equals(httpLogPath, that.httpLogPath)) {
+            return false;
+        }
+        if (!Objects.equals(name, that.name)) {
+            return false;
+        }
+        if (!Objects.equals(pidPath, that.pidPath)) {
+            return false;
+        }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (executablePath != null ? executablePath.hashCode() : 0);
         result = 31 * result + (configPath != null ? configPath.hashCode() : 0);
@@ -148,7 +153,8 @@ public class NginxServerDescriptor implements Cloneable {
     public NginxServerDescriptor clone() {
         try {
             return (NginxServerDescriptor) super.clone();
-        } catch (CloneNotSupportedException e) {
+        }
+        catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
     }
