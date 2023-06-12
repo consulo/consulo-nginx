@@ -19,10 +19,7 @@ package net.ishchenko.idea.nginx.run;
 import consulo.execution.ui.console.ConsoleView;
 import consulo.execution.ui.console.ConsoleViewContentType;
 import consulo.logging.Logger;
-import consulo.process.ExecutionException;
-import consulo.process.ProcessHandler;
-import consulo.process.ProcessHandlerBuilder;
-import consulo.process.ProcessOutputTypes;
+import consulo.process.*;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.event.ProcessEvent;
 import consulo.process.event.ProcessListener;
@@ -48,7 +45,7 @@ import java.util.Objects;
  * Date: 24.07.2009
  * Time: 2:42:59
  */
-public class NginxProcessHandler extends ProcessHandler {
+public class NginxProcessHandler extends BaseProcessHandler {
 
     public static final Logger LOG = Logger.getInstance(NginxProcessHandler.class);
 
