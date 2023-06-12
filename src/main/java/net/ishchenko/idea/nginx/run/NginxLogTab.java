@@ -5,7 +5,7 @@ import consulo.execution.configuration.log.ui.AdditionalTabComponent;
 import consulo.execution.ui.console.ConsoleView;
 import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import consulo.logging.Logger;
-import consulo.process.ProcessHandler;
+import consulo.process.NopProcessHandler;
 import consulo.process.ProcessOutputTypes;
 import consulo.project.Project;
 import consulo.ui.ex.action.ActionGroup;
@@ -130,7 +130,7 @@ public class NginxLogTab extends AdditionalTabComponent {
     }
 
 
-    private static class LightProcessHandler extends ProcessHandler {
+    private static class LightProcessHandler extends NopProcessHandler {
 
         protected void destroyProcessImpl() {
             throw new UnsupportedOperationException();
