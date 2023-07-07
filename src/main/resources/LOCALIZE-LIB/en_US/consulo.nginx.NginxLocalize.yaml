@@ -1,0 +1,101 @@
+annotator.expected.boolean:
+  text: Boolean value expected (on|off)
+annotator.expected.anything:
+  text: A value expected
+annotator.not.boolean:
+  text: Unexpected value for boolean directive "{0}"
+annotator.directive.unknown:
+  text: Unknown directive "{0}"
+annotator.directive.cantbeinmain:
+  text: The directive "{0}" can't reside main context
+annotator.directive.openresty.deprecated:
+  text: The "*_by_lua" directives are deprecated, use "*_by_lua_block" directives instead
+config.addfile:
+  text: Add file...
+config.removefile:
+  text: Remove file...
+config.column.left:
+  text: Path
+config.column.right:
+  text: '...'
+config.title:
+  text: nginx Servers
+cofigurationtype.displayname:
+  text: nginx server
+configurationtype.description:
+  text: Run nginx Server
+parser.eof:
+  text: Unexpected end of file
+parser.expected:
+  text: '{0} expected'
+parser.orexpected:
+  text: '{0} or {1} expected'
+parser.unexpected:
+  text: Unexpected {0}
+run.choose:
+  text: 'Choose nginx server:'
+run.configureButton:
+  text: '&Configure...'
+run.reloading:
+  text: Reloading nginx configuration files...
+run.reloadingdone:
+  text: Done
+run.error.badpath:
+  text: Invalid path to nginx executable
+run.error.notexecutable:
+  text: Selected file is not executable
+run.reloadfailed:
+  text: Reload failed
+run.validationfailed:
+  text: Validation failed
+run.error.noserver:
+  text: No server chosen
+run.error.servernotfound:
+  text: Server configuration not found
+run.newserver:
+  text: New...
+run.removeserver:
+  text: Remove
+run.servername:
+  text: Server name
+run.executable:
+  text: nginx Executable
+run.configuration:
+  text: Configuration File
+run.serverinfo:
+  text: Server Info
+run.globals:
+  text: Globals
+run.notnginx:
+  text: |-
+    It seems, that the executable selected is not a valid nginx executable.
+    Maybe, execution failed, or process output for -V argument did not match the expected pattern.
+    However, if you press OK this fact will be ignored and defaults for configuration path, pid path etc will be used.
+run.notnginx.warning:
+  text: Warning!
+run.doyouwanttorun:
+  text: |-
+    Do you want to run selected executable with -V argument?
+    This is used to detect version and default path parameters.
+run.pidpath:
+  text: Pid File
+run.configuration.outputwontmatch:
+  text: Output does not match
+annotator.directive.canthavecontext:
+  text: Directive "{0}" can not have child context
+annotator.directive.wrongnumberofvalues:
+  text: Wrong number of values for {0}. Expected {1}, but got {2}.
+run.showAccessLog:
+  text: Show &http log
+run.showErrorLog:
+  text: Show &error log
+run.logFiles:
+  text: Log Files
+run.layoutExplanation:
+  text: ''
+annotator.variable.notexists:
+  text: Unknown variable "{0}"
+docs.directive.notfound:
+  text: No documentation found for directive "{0}"
+docs.variable.notfound:
+  text: No documentation found for variable "{0}"

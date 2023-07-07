@@ -20,7 +20,9 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.RunConfiguration;
+import consulo.localize.LocalizeValue;
 import consulo.nginx.icon.NginxIconGroup;
+import consulo.nginx.localize.NginxLocalize;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import net.ishchenko.idea.nginx.NginxBundle;
@@ -36,12 +38,12 @@ public class NginxConfigurationType implements ConfigurationType {
 
     NginxConfigurationFactory ncf = new NginxConfigurationFactory(this);
 
-    public String getDisplayName() {
-        return NginxBundle.message("cofigurationtype.displayname");
+    public LocalizeValue getDisplayName() {
+        return NginxLocalize.cofigurationtypeDisplayname();
     }
 
-    public String getConfigurationTypeDescription() {
-        return NginxBundle.message("configurationtype.description");
+    public LocalizeValue getConfigurationTypeDescription() {
+        return NginxLocalize.configurationtypeDescription();
     }
 
     public Image getIcon() {
