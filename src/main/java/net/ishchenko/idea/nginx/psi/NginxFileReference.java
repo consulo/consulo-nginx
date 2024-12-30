@@ -19,7 +19,7 @@ package net.ishchenko.idea.nginx.psi;
 import consulo.document.util.TextRange;
 import consulo.language.psi.path.FileReference;
 import consulo.language.psi.path.FileReferenceSet;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

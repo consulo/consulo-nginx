@@ -22,7 +22,7 @@ import consulo.language.Language;
 import consulo.language.PairedBraceMatcher;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

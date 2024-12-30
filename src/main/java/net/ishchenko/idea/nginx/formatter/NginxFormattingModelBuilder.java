@@ -25,7 +25,7 @@ import consulo.language.psi.PsiFile;
 import net.ishchenko.idea.nginx.NginxLanguage;
 import net.ishchenko.idea.nginx.formatter.blocks.NginxBlock;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

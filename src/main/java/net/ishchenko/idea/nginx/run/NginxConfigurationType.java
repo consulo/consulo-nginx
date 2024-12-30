@@ -26,7 +26,7 @@ import consulo.nginx.localize.NginxLocalize;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import net.ishchenko.idea.nginx.NginxBundle;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: Max

@@ -18,7 +18,7 @@ package net.ishchenko.idea.nginx.lexer;
 
 import consulo.language.ast.IElementType;
 import net.ishchenko.idea.nginx.NginxLanguage;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

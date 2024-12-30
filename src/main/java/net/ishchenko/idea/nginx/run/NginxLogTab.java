@@ -14,7 +14,7 @@ import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.util.dataholder.Key;
 import consulo.util.io.FileUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;

@@ -36,7 +36,7 @@ import net.ishchenko.idea.nginx.NginxLanguage;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
 import net.ishchenko.idea.nginx.lexer.NginxParsingLexer;
 import net.ishchenko.idea.nginx.psi.impl.*;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

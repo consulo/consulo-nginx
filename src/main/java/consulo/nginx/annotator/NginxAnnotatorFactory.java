@@ -7,8 +7,8 @@ import consulo.language.editor.annotation.AnnotatorFactory;
 import net.ishchenko.idea.nginx.NginxLanguage;
 import net.ishchenko.idea.nginx.annotator.NginxAnnotatingVisitor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL

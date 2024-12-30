@@ -3,7 +3,7 @@ package net.ishchenko.idea.nginx.injection;
 import consulo.document.util.TextRange;
 import consulo.language.psi.LiteralTextEscaper;
 import net.ishchenko.idea.nginx.psi.NginxLuaContext;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class LuaTextEscaper extends LiteralTextEscaper<NginxLuaContext> {
     public LuaTextEscaper(@Nonnull NginxLuaContext host) {

@@ -21,7 +21,7 @@ import consulo.virtualFileSystem.fileType.FileType;
 import consulo.language.file.FileViewProvider;
 import net.ishchenko.idea.nginx.NginxFileType;
 import net.ishchenko.idea.nginx.psi.NginxPsiFile;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

@@ -11,7 +11,7 @@ import consulo.language.util.IncorrectOperationException;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
 import net.ishchenko.idea.nginx.psi.NginxDirectiveValue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: Max

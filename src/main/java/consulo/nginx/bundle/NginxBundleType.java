@@ -15,8 +15,8 @@ import net.ishchenko.idea.nginx.platform.NginxCompileParametersExtractor;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**

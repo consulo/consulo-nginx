@@ -42,7 +42,7 @@ import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.File;
 
 /**

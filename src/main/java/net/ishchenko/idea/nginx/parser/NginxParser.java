@@ -23,7 +23,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.version.LanguageVersion;
 import net.ishchenko.idea.nginx.NginxBundle;
 import net.ishchenko.idea.nginx.lexer.NginxElementTypes;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

@@ -25,7 +25,7 @@ import consulo.nginx.bundle.NginxBundleType;
 import consulo.project.Project;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 /**

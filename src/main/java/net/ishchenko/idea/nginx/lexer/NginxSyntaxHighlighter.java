@@ -19,7 +19,7 @@ package net.ishchenko.idea.nginx.lexer;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.lexer.FlexAdapter;
 import consulo.language.lexer.Lexer;

@@ -7,7 +7,7 @@ import consulo.language.editor.highlight.SyntaxHighlighter;
 import net.ishchenko.idea.nginx.NginxLanguage;
 import net.ishchenko.idea.nginx.lexer.NginxSyntaxHighlighter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

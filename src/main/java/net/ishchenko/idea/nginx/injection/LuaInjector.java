@@ -9,7 +9,7 @@ import consulo.language.inject.LanguageInjector;
 import consulo.language.psi.PsiLanguageInjectionHost;
 import consulo.virtualFileSystem.fileType.FileType;
 import net.ishchenko.idea.nginx.psi.NginxLuaContext;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class LuaInjector implements LanguageInjector {

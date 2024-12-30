@@ -23,7 +23,7 @@ import consulo.localize.LocalizeValue;
 import consulo.nginx.icon.NginxIconGroup;
 import consulo.ui.image.Image;
 import net.ishchenko.idea.nginx.configurator.NginxServersConfiguration;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

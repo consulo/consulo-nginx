@@ -7,8 +7,8 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceBase;
 import consulo.language.psi.util.PsiTreeUtil;
 import net.ishchenko.idea.nginx.NginxKeywordsManager;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 

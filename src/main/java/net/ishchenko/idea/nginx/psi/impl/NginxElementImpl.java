@@ -19,7 +19,7 @@ package net.ishchenko.idea.nginx.psi.impl;
 import consulo.language.impl.psi.ASTWrapperPsiElement;
 import consulo.language.ast.ASTNode;
 import net.ishchenko.idea.nginx.psi.NginxPsiElement;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
