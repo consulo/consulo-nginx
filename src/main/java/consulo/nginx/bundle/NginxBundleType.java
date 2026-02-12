@@ -4,19 +4,19 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.component.extension.ExtensionInstance;
 import consulo.content.bundle.*;
 import consulo.fileChooser.FileChooserDescriptor;
+import consulo.localize.LocalizeValue;
 import consulo.nginx.icon.NginxIconGroup;
-import consulo.project.ProjectBundle;
-import consulo.ui.image.Image;
+import consulo.project.localize.ProjectLocalize;
 import consulo.util.xml.serializer.XmlSerializer;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 import net.ishchenko.idea.nginx.platform.NginxCompileParametersExtractor;
 import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
 import org.jdom.Element;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -32,7 +32,7 @@ public class NginxBundleType extends SdkType {
     }
 
     public NginxBundleType() {
-        super("NGINX");
+        super("NGINX", LocalizeValue.localizeTODO("Nginx"), NginxIconGroup.nginx());
     }
 
     @Override
@@ -63,16 +63,16 @@ public class NginxBundleType extends SdkType {
                     if (!valid) {
                         valid = isValidSdkHome(adjustSelectedSdkHome(selectedPath));
                         if (!valid) {
-                            String message = files[0].isDirectory()
-                                    ? ProjectBundle.message("sdk.configure.home.invalid.error", getPresentableName())
-                                    : ProjectBundle.message("sdk.configure.home.file.invalid.error", getPresentableName());
-                            throw new Exception(message);
+                            LocalizeValue message = files[0].isDirectory()
+                                    ? ProjectLocalize.sdkConfigureHomeInvalidError(getDisplayName())
+                                    : ProjectLocalize.sdkConfigureHomeFileInvalidError(getDisplayName());
+                            throw new Exception(message.get());
                         }
                     }
                 }
             }
         };
-        descriptor.setTitle(ProjectBundle.message("sdk.configure.home.title", getPresentableName()));
+        descriptor.withTitleValue(ProjectLocalize.sdkConfigureHomeTitle(getDisplayName()));
         return descriptor;
     }
 
@@ -104,22 +104,5 @@ public class NginxBundleType extends SdkType {
     @Override
     public SdkAdditionalData loadAdditionalData(Sdk currentSdk, Element additional) {
         return XmlSerializer.deserialize(additional, NginxServerDescriptor.class);
-    }
-
-    @Override
-    public String suggestSdkName(String s, String path) {
-        return getPresentableName() + " " + getVersionString(path);
-    }
-
-    @Nonnull
-    @Override
-    public String getPresentableName() {
-        return "Nginx";
-    }
-
-    @Nonnull
-    @Override
-    public Image getIcon() {
-        return NginxIconGroup.nginx();
     }
 }
