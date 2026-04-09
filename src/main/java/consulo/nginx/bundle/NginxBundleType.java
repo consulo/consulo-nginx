@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 /**
  * @author VISTALL
- * @since 27/04/2023
+ * @since 2023-04-27
  */
 @ExtensionImpl
 public class NginxBundleType extends SdkType {
@@ -72,7 +72,7 @@ public class NginxBundleType extends SdkType {
                 }
             }
         };
-        descriptor.withTitleValue(ProjectLocalize.sdkConfigureHomeTitle(getDisplayName()));
+        descriptor.withTitle(ProjectLocalize.sdkConfigureHomeTitle(getDisplayName()));
         return descriptor;
     }
 
