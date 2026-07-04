@@ -35,6 +35,7 @@ import consulo.process.event.ProcessEvent;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
@@ -52,7 +53,7 @@ import java.io.File;
  * Time: 4:15:37
  */
 @ActionImpl(id = "nginx.reload")
-public class NginxReloadAction extends AnAction {
+public class NginxReloadAction extends AnAction implements AnActionWithSyncUpdate {
     public NginxReloadAction() {
         super("Reload nginx configuration files", "Reloads nginx configuration files", PlatformIconGroup.actionsRefresh());
     }
