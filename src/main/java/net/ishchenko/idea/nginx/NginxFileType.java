@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
  * Date: 04.07.2009
  * Time: 1:03:43
  */
-public class NginxFileType extends LanguageFileType implements FileTypeIdentifiableByVirtualFile {
+public class NginxFileType extends LanguageFileType {
 
     public static final NginxFileType INSTANCE = new NginxFileType();
 
@@ -43,29 +43,28 @@ public class NginxFileType extends LanguageFileType implements FileTypeIdentifia
         return INSTANCE;
     }
 
+    @Override
     @Nonnull
     public String getId() {
         return "nginx";
     }
 
+    @Override
     @Nonnull
     public LocalizeValue getDescription() {
         return LocalizeValue.localizeTODO("nginx config file");
     }
 
+    @Override
     @Nonnull
     public String getDefaultExtension() {
         return "conf";
     }
 
+    @Override
     public Image getIcon() {
         return NginxIconGroup.nginx();
     }
-
-    public boolean isMyFileType(VirtualFile virtualFile) {
-        return NginxServersConfiguration.getInstance().getFilepaths().contains(virtualFile.getPath());
-    }
-
 }
 
 
