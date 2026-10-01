@@ -18,107 +18,97 @@ package net.ishchenko.idea.nginx.run;
 
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkUtil;
-import consulo.ui.ex.awt.ColoredListCellRenderer;
-import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
-import net.ishchenko.idea.nginx.NginxBundle;
+import consulo.nginx.localize.NginxLocalize;
+import consulo.ui.Button;
+import consulo.ui.CheckBox;
+import consulo.ui.ComboBox;
+import consulo.ui.Component;
+import consulo.ui.TextBox;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.layout.DockLayout;
+import consulo.ui.layout.LabeledLayout;
+import consulo.ui.layout.VerticalLayout;
+import consulo.ui.model.FlatDataModel;
+import consulo.ui.model.MutableFlatDataModel;
+import consulo.ui.util.FormBuilder;
 
-import jakarta.annotation.Nonnull;
-import javax.swing.*;
+import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Max
- * Date: 29.07.2009
- * Time: 18:00:55
- */
 public class NginxRunSettingsForm {
-    JComboBox<Sdk> serverCombo;
-    JTextField executableField;
-    JTextField configurationField;
-    JButton configureButton;
-    JPanel panel;
-    JTextField globalsField;
-    JTextField pidField;
-    JCheckBox showHttpLogCheckBox;
-    JTextField httpLogPathField;
-    JCheckBox showErrorLogCheckBox;
-    JTextField errorLogPathField;
-    private JLabel explanationLabel;
+    final MutableFlatDataModel<Sdk> serverModel = FlatDataModel.of(List.of());
+    final ComboBox<Sdk> serverCombo;
+    final TextBox executableField;
+    final TextBox configurationField;
+    final TextBox globalsField;
+    final TextBox pidField;
+    final CheckBox showHttpLogCheckBox;
+    final TextBox httpLogPathField;
+    final CheckBox showErrorLogCheckBox;
+    final TextBox errorLogPathField;
 
-    public NginxRunSettingsForm(final NginxRunSettingsEditor.Mediator mediator) {
+    private final Component myPanel;
 
+    @RequiredUIAccess
+    public NginxRunSettingsForm(NginxRunSettingsEditor.Mediator mediator) {
         mediator.form = this;
 
-        serverCombo.setRenderer(new NginxServerComboboxRenderer());
-        serverCombo.addActionListener(e -> mediator.onChooseDescriptor((Sdk) serverCombo.getSelectedItem()));
-
-        configureButton.addActionListener(
-                e -> mediator.showServerManagerDialog()
-        );
-
-        showHttpLogCheckBox.addActionListener(e -> mediator.onHttpLogCheckboxAction());
-
-        showErrorLogCheckBox.addActionListener(e -> mediator.onErrorLogCheckboxAction());
-
-    }
-
-    public JPanel getPanel() {
-        return panel;
-    }
-
-    private void createUIComponents() {
-        explanationLabel = new JLabel(NginxBundle.message("run.layoutExplanation"));
-        explanationLabel.setUI(new MultiLineLabelUI());
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    private void $$$loadButtonText$$$(AbstractButton component, String text) {
-        StringBuffer result = new StringBuffer();
-        boolean haveMnemonic = false;
-        char mnemonic = '\0';
-        int mnemonicIndex = -1;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '&') {
-                i++;
-                if (i == text.length()) {
-                    break;
-                }
-                if (!haveMnemonic && text.charAt(i) != '&') {
-                    haveMnemonic = true;
-                    mnemonic = text.charAt(i);
-                    mnemonicIndex = result.length();
-                }
+        serverCombo = ComboBox.create(serverModel);
+        serverCombo.setRender((presentation, item) -> {
+            Sdk sdk = item.getValue();
+            if (sdk != null) {
+                presentation.withIcon(SdkUtil.getIcon(sdk));
+                presentation.append(sdk.getName());
             }
-            result.append(text.charAt(i));
-        }
-        component.setText(result.toString());
-        if (haveMnemonic) {
-            component.setMnemonic(mnemonic);
-            component.setDisplayedMnemonicIndex(mnemonicIndex);
-        }
+        });
+        serverCombo.addValueListener(event -> mediator.onChooseDescriptor(event.getValue()));
+
+        Button configureButton = Button.create(NginxLocalize.runConfigurebutton(), event -> mediator.showServerManagerDialog());
+
+        executableField = createReadOnlyField();
+        configurationField = createReadOnlyField();
+        pidField = createReadOnlyField();
+        globalsField = createReadOnlyField();
+
+        showHttpLogCheckBox = CheckBox.create(NginxLocalize.runShowaccesslog());
+        showHttpLogCheckBox.addValueListener(event -> mediator.onHttpLogCheckboxAction());
+        httpLogPathField = TextBox.create();
+
+        showErrorLogCheckBox = CheckBox.create(NginxLocalize.runShowerrorlog());
+        showErrorLogCheckBox.addValueListener(event -> mediator.onErrorLogCheckboxAction());
+        errorLogPathField = TextBox.create();
+
+        DockLayout serverRow = DockLayout.create();
+        serverRow.center(serverCombo);
+        serverRow.right(configureButton);
+
+        FormBuilder serverInfo = FormBuilder.create();
+        serverInfo.addLabeled(NginxLocalize.runExecutable(), executableField);
+        serverInfo.addLabeled(NginxLocalize.runConfiguration(), configurationField);
+        serverInfo.addLabeled(NginxLocalize.runPidpath(), pidField);
+        serverInfo.addLabeled(NginxLocalize.runGlobals(), globalsField);
+
+        FormBuilder logFiles = FormBuilder.create();
+        logFiles.addLabeled(showHttpLogCheckBox, httpLogPathField);
+        logFiles.addLabeled(showErrorLogCheckBox, errorLogPathField);
+
+        FormBuilder builder = FormBuilder.create();
+        builder.addLabeled(NginxLocalize.runChoose(), serverRow);
+
+        VerticalLayout panel = VerticalLayout.create();
+        panel.add(builder.build());
+        panel.add(LabeledLayout.create(NginxLocalize.runServerinfo(), serverInfo.build()));
+        panel.add(LabeledLayout.create(NginxLocalize.runLogfiles(), logFiles.build()));
+        myPanel = panel;
     }
 
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return panel;
+    @RequiredUIAccess
+    private static TextBox createReadOnlyField() {
+        TextBox textBox = TextBox.create();
+        textBox.setEditable(false);
+        return textBox;
     }
 
-    private static class NginxServerComboboxRenderer extends ColoredListCellRenderer<Sdk> {
-
-
-        @Override
-        protected void customizeCellRenderer(@Nonnull JList<? extends Sdk> jList, Sdk sdk, int i, boolean b, boolean b1) {
-            if (sdk == null) {
-                append("");
-            }
-            else {
-                append(sdk.getName());
-                setIcon(SdkUtil.getIcon(sdk));
-            }
-        }
+    public Component getPanel() {
+        return myPanel;
     }
 }
