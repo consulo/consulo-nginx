@@ -19,12 +19,19 @@ package consulo.nginx.bundle;
 import consulo.configurable.ConfigurationException;
 import consulo.content.bundle.AdditionalDataConfigurable;
 import consulo.content.bundle.Sdk;
+import consulo.disposer.Disposable;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.fileChooser.FileChooserTextBoxBuilder;
+import consulo.localize.LocalizeValue;
+import consulo.nginx.localize.NginxLocalize;
+import consulo.ui.Component;
+import consulo.ui.TextBox;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.awt.ComponentWithBrowseButton;
+import consulo.ui.util.FormBuilder;
+import consulo.util.lang.StringUtil;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
 
 import jakarta.annotation.Nullable;
-import javax.swing.*;
 import java.util.Objects;
 
 /**
@@ -34,31 +41,44 @@ import java.util.Objects;
  * Time: 3:41:46
  */
 public class ServerFieldsForm2 implements AdditionalDataConfigurable {
-    private JPanel panel;
-    private ComponentWithBrowseButton<JTextField> configurationField;
-    private ComponentWithBrowseButton<JTextField> pidField;
-    private JTextField globalsField;
-
     private final NginxServerDescriptor nginxServerDescriptor;
+
+    @Nullable
+    private Component myComponent;
+    @Nullable
+    private FileChooserTextBoxBuilder.Controller myConfigurationField;
+    @Nullable
+    private FileChooserTextBoxBuilder.Controller myPidField;
+    @Nullable
+    private TextBox myGlobalsField;
 
     public ServerFieldsForm2(NginxServerDescriptor descriptor) {
         this.nginxServerDescriptor = descriptor;
-
-        configurationField.getChildComponent().setText(descriptor.getConfigPath());
-        pidField.getChildComponent().setText(descriptor.getPidPath());
-        globalsField.setText(descriptor.getGlobals());
     }
 
     @RequiredUIAccess
-    @Nullable
     @Override
-    public JComponent createComponent() {
-        return panel;
+    public Component createUIComponent(Disposable parentDisposable) {
+        if (myComponent == null) {
+            myConfigurationField = createFileField(parentDisposable);
+            myPidField = createFileField(parentDisposable);
+            myGlobalsField = TextBox.create();
+
+            FormBuilder builder = FormBuilder.create();
+            builder.addLabeled(LocalizeValue.join(NginxLocalize.runConfiguration(), LocalizeValue.colon()), myConfigurationField.getComponent());
+            builder.addLabeled(LocalizeValue.join(NginxLocalize.runPidpath(), LocalizeValue.colon()), myPidField.getComponent());
+            builder.addLabeled(LocalizeValue.join(NginxLocalize.runGlobals(), LocalizeValue.colon()), myGlobalsField);
+            myComponent = builder.build();
+        }
+        return myComponent;
     }
 
-    private void createUIComponents() {
-        configurationField = new ComponentWithBrowseButton<>(new JTextField(), null);
-        pidField = new ComponentWithBrowseButton<>(new JTextField(), null);
+    @RequiredUIAccess
+    private static FileChooserTextBoxBuilder.Controller createFileField(Disposable parentDisposable) {
+        FileChooserTextBoxBuilder builder = FileChooserTextBoxBuilder.create(null);
+        builder.fileChooserDescriptor(FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor());
+        builder.uiDisposable(parentDisposable);
+        return builder.build();
     }
 
     @Override
@@ -69,16 +89,42 @@ public class ServerFieldsForm2 implements AdditionalDataConfigurable {
     @RequiredUIAccess
     @Override
     public boolean isModified() {
-        return !Objects.equals(configurationField.getChildComponent().getText(),  nginxServerDescriptor.getConfigPath()) ||
-                !Objects.equals(pidField.getChildComponent().getText(), nginxServerDescriptor.getPidPath()) ||
-                !Objects.equals(globalsField.getText(), nginxServerDescriptor.getGlobals());
+        if (myConfigurationField == null || myPidField == null || myGlobalsField == null) {
+            return false;
+        }
+        return !Objects.equals(myConfigurationField.getValue(), StringUtil.notNullize(nginxServerDescriptor.getConfigPath())) ||
+                !Objects.equals(myPidField.getValue(), StringUtil.notNullize(nginxServerDescriptor.getPidPath())) ||
+                !Objects.equals(StringUtil.notNullize(myGlobalsField.getValue()), StringUtil.notNullize(nginxServerDescriptor.getGlobals()));
     }
 
     @RequiredUIAccess
     @Override
     public void apply() throws ConfigurationException {
-        nginxServerDescriptor.setConfigPath(configurationField.getChildComponent().getText());
-        nginxServerDescriptor.setPidPath(pidField.getChildComponent().getText());
-        nginxServerDescriptor.setGlobals(globalsField.getText());
+        if (myConfigurationField == null || myPidField == null || myGlobalsField == null) {
+            return;
+        }
+        nginxServerDescriptor.setConfigPath(myConfigurationField.getValue());
+        nginxServerDescriptor.setPidPath(myPidField.getValue());
+        nginxServerDescriptor.setGlobals(StringUtil.notNullize(myGlobalsField.getValue()));
+    }
+
+    @RequiredUIAccess
+    @Override
+    public void reset() {
+        if (myConfigurationField == null || myPidField == null || myGlobalsField == null) {
+            return;
+        }
+        myConfigurationField.setValue(StringUtil.notNullize(nginxServerDescriptor.getConfigPath()));
+        myPidField.setValue(StringUtil.notNullize(nginxServerDescriptor.getPidPath()));
+        myGlobalsField.setValue(StringUtil.notNullize(nginxServerDescriptor.getGlobals()));
+    }
+
+    @RequiredUIAccess
+    @Override
+    public void disposeUIResources() {
+        myComponent = null;
+        myConfigurationField = null;
+        myPidField = null;
+        myGlobalsField = null;
     }
 }

@@ -18,11 +18,13 @@ package net.ishchenko.idea.nginx.run;
 
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkUtil;
+import consulo.localize.LocalizeValue;
 import consulo.nginx.localize.NginxLocalize;
 import consulo.ui.Button;
 import consulo.ui.CheckBox;
 import consulo.ui.ComboBox;
 import consulo.ui.Component;
+import consulo.ui.Space;
 import consulo.ui.TextBox;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.DockLayout;
@@ -34,6 +36,12 @@ import consulo.ui.util.FormBuilder;
 
 import java.util.List;
 
+/**
+ * Created by IntelliJ IDEA.
+ * User: Max
+ * Date: 29.07.2009
+ * Time: 18:00:55
+ */
 public class NginxRunSettingsForm {
     final MutableFlatDataModel<Sdk> serverModel = FlatDataModel.of(List.of());
     final ComboBox<Sdk> serverCombo;
@@ -72,20 +80,22 @@ public class NginxRunSettingsForm {
         showHttpLogCheckBox = CheckBox.create(NginxLocalize.runShowaccesslog());
         showHttpLogCheckBox.addValueListener(event -> mediator.onHttpLogCheckboxAction());
         httpLogPathField = TextBox.create();
+        httpLogPathField.setEnabled(false);
 
         showErrorLogCheckBox = CheckBox.create(NginxLocalize.runShowerrorlog());
         showErrorLogCheckBox.addValueListener(event -> mediator.onErrorLogCheckboxAction());
         errorLogPathField = TextBox.create();
+        errorLogPathField.setEnabled(false);
 
-        DockLayout serverRow = DockLayout.create();
+        DockLayout serverRow = DockLayout.create(Space.SMALL);
         serverRow.center(serverCombo);
         serverRow.right(configureButton);
 
         FormBuilder serverInfo = FormBuilder.create();
-        serverInfo.addLabeled(NginxLocalize.runExecutable(), executableField);
-        serverInfo.addLabeled(NginxLocalize.runConfiguration(), configurationField);
-        serverInfo.addLabeled(NginxLocalize.runPidpath(), pidField);
-        serverInfo.addLabeled(NginxLocalize.runGlobals(), globalsField);
+        serverInfo.addLabeled(LocalizeValue.join(NginxLocalize.runExecutable(), LocalizeValue.colon()), executableField);
+        serverInfo.addLabeled(LocalizeValue.join(NginxLocalize.runConfiguration(), LocalizeValue.colon()), configurationField);
+        serverInfo.addLabeled(LocalizeValue.join(NginxLocalize.runPidpath(), LocalizeValue.colon()), pidField);
+        serverInfo.addLabeled(LocalizeValue.join(NginxLocalize.runGlobals(), LocalizeValue.colon()), globalsField);
 
         FormBuilder logFiles = FormBuilder.create();
         logFiles.addLabeled(showHttpLogCheckBox, httpLogPathField);
@@ -96,8 +106,8 @@ public class NginxRunSettingsForm {
 
         VerticalLayout panel = VerticalLayout.create();
         panel.add(builder.build());
-        panel.add(LabeledLayout.create(NginxLocalize.runServerinfo(), serverInfo.build()));
-        panel.add(LabeledLayout.create(NginxLocalize.runLogfiles(), logFiles.build()));
+        panel.add(LabeledLayout.create(NginxLocalize.runServerinfo(), DockLayout.create().center(serverInfo.build())));
+        panel.add(LabeledLayout.create(NginxLocalize.runLogfiles(), DockLayout.create().center(logFiles.build())));
         myPanel = panel;
     }
 

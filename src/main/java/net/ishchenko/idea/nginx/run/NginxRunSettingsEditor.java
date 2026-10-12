@@ -23,12 +23,21 @@ import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.nginx.bundle.NginxBundleType;
 import consulo.project.Project;
+import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
-import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Max
+ * Date: 14.07.2009
+ * Time: 19:29:20
+ */
 public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration> {
     private final Project project;
     private final NginxRunConfiguration config;
@@ -41,6 +50,7 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
     }
 
     @Override
+    @RequiredUIAccess
     protected void applyEditorTo(NginxRunConfiguration s) throws ConfigurationException {
         mediator.applyEditorTo(s);
     }
@@ -57,19 +67,27 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
         return new NginxRunSettingsForm(mediator).getPanel();
     }
 
+    @Override
+    protected void disposeEditor() {
+        mediator.form = null;
+    }
+
     class Mediator {
         @Nullable
         NginxRunSettingsForm form;
 
         @RequiredUIAccess
         void showServerManagerDialog() {
-            ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
-                projectStructureSelector.select((Sdk) null, true);
-            });
-
-            resetEditorFrom(config);
+            ShowSettingsUtil.getInstance()
+                .showProjectStructureDialog(project, projectStructureSelector -> projectStructureSelector.select((Sdk) null, true))
+                .whenComplete((result, error) -> project.getUIAccess().give(() -> {
+                    if (!project.isDisposed()) {
+                        resetEditorFrom(config);
+                    }
+                }));
         }
 
+        @RequiredUIAccess
         public void applyEditorTo(NginxRunConfiguration s) {
             NginxRunSettingsForm form = this.form;
             if (form == null) {
@@ -79,10 +97,10 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
             Sdk descriptor = form.serverCombo.getValue();
             if (descriptor != null) {
                 s.setServerDescriptorId(descriptor.getName());
-                s.setShowHttpLog(Boolean.TRUE.equals(form.showHttpLogCheckBox.getValue()));
-                s.setHttpLogPath(form.httpLogPathField.getValue());
-                s.setShowErrorLog(Boolean.TRUE.equals(form.showErrorLogCheckBox.getValue()));
-                s.setErrorLogPath(form.errorLogPathField.getValue());
+                s.setShowHttpLog(isSelected(form.showHttpLogCheckBox));
+                s.setHttpLogPath(StringUtil.notNullize(form.httpLogPathField.getValue()));
+                s.setShowErrorLog(isSelected(form.showErrorLogCheckBox));
+                s.setErrorLogPath(StringUtil.notNullize(form.errorLogPathField.getValue()));
             }
         }
 
@@ -93,7 +111,9 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
                 return;
             }
 
-            NginxServerDescriptor descriptor = sdk == null ? null : (NginxServerDescriptor) sdk.getSdkAdditionalData();
+            NginxServerDescriptor descriptor = sdk != null && sdk.getSdkAdditionalData() instanceof NginxServerDescriptor serverDescriptor
+                ? serverDescriptor
+                : null;
             if (descriptor != null) {
                 form.executableField.setValue(StringUtil.notNullize(descriptor.getExecutablePath()));
                 form.configurationField.setValue(StringUtil.notNullize(descriptor.getConfigPath()));
@@ -116,7 +136,7 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
         public void onHttpLogCheckboxAction() {
             NginxRunSettingsForm form = this.form;
             if (form != null) {
-                form.httpLogPathField.setEnabled(Boolean.TRUE.equals(form.showHttpLogCheckBox.getValue()));
+                form.httpLogPathField.setEnabled(isSelected(form.showHttpLogCheckBox));
             }
         }
 
@@ -124,7 +144,7 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
         public void onErrorLogCheckboxAction() {
             NginxRunSettingsForm form = this.form;
             if (form != null) {
-                form.errorLogPathField.setEnabled(Boolean.TRUE.equals(form.showErrorLogCheckBox.getValue()));
+                form.errorLogPathField.setEnabled(isSelected(form.showErrorLogCheckBox));
             }
         }
 
@@ -135,20 +155,44 @@ public class NginxRunSettingsEditor extends SettingsEditor<NginxRunConfiguration
                 return;
             }
 
-            form.serverModel.replaceAll(SdkTable.getInstance().getSdksOfType(NginxBundleType.getInstance()));
+            List<Sdk> servers = project.getApplication().getInstance(SdkTable.class).getSdksOfType(NginxBundleType.getInstance());
+            form.serverModel.replaceAll(servers);
 
-            Sdk descriptor = null;
-            String chosenDescriptorId = configuration.getServerDescriptorId();
-            if (chosenDescriptorId != null) {
-                descriptor = SdkTable.getInstance().findSdk(chosenDescriptorId);
-            }
-            form.serverCombo.setValue(descriptor);
+            Sdk descriptor = findServer(servers, configuration.getServerDescriptorId());
+            form.serverCombo.setValue(descriptor, false);
             onChooseDescriptor(descriptor);
+
+            String httpLogPath = configuration.getHttpLogPath();
+            if (!StringUtil.isEmpty(httpLogPath)) {
+                form.httpLogPathField.setValue(httpLogPath);
+            }
+            String errorLogPath = configuration.getErrorLogPath();
+            if (!StringUtil.isEmpty(errorLogPath)) {
+                form.errorLogPathField.setValue(errorLogPath);
+            }
 
             form.showHttpLogCheckBox.setValue(configuration.isShowHttpLog(), false);
             form.httpLogPathField.setEnabled(configuration.isShowHttpLog());
             form.showErrorLogCheckBox.setValue(configuration.isShowErrorLog(), false);
             form.errorLogPathField.setEnabled(configuration.isShowErrorLog());
+        }
+
+        @Nullable
+        private Sdk findServer(List<Sdk> servers, @Nullable String name) {
+            if (name == null) {
+                return null;
+            }
+            for (Sdk server : servers) {
+                if (name.equals(server.getName())) {
+                    return server;
+                }
+            }
+            return null;
+        }
+
+        @RequiredUIAccess
+        private boolean isSelected(CheckBox checkBox) {
+            return Boolean.TRUE.equals(checkBox.getValue());
         }
     }
 }
