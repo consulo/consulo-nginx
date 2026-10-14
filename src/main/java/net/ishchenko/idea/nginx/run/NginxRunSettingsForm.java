@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.ishchenko.idea.nginx.run;
 
 import consulo.content.bundle.Sdk;
@@ -37,10 +36,8 @@ import consulo.ui.util.FormBuilder;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Max
- * Date: 29.07.2009
- * Time: 18:00:55
+ * @author Max
+ * @since 2009-07-29
  */
 public class NginxRunSettingsForm {
     final MutableFlatDataModel<Sdk> serverModel = FlatDataModel.of(List.of());
@@ -61,7 +58,7 @@ public class NginxRunSettingsForm {
         mediator.form = this;
 
         serverCombo = ComboBox.create(serverModel);
-        serverCombo.setRender((presentation, item) -> {
+        serverCombo.setRenderer((presentation, item) -> {
             Sdk sdk = item.getValue();
             if (sdk != null) {
                 presentation.withIcon(SdkUtil.getIcon(sdk));
