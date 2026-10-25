@@ -10,6 +10,7 @@ import consulo.project.localize.ProjectLocalize;
 import consulo.util.xml.serializer.XmlSerializer;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.io.FileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import net.ishchenko.idea.nginx.configurator.NginxServerDescriptor;
@@ -18,6 +19,9 @@ import net.ishchenko.idea.nginx.platform.PlatformDependentTools;
 import org.jdom.Element;
 
 import java.util.function.Supplier;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 /**
  * @author VISTALL
@@ -56,14 +60,14 @@ public class NginxBundleType extends SdkType {
     public FileChooserDescriptor getHomeChooserDescriptor() {
         final FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, false, false, false, false) {
             @Override
-            public void validateSelectedFiles(VirtualFile[] files) throws Exception {
-                if (files.length != 0) {
-                    final String selectedPath = files[0].getPath();
+            public void validateSelectedPaths(List<Path> paths) throws Exception {
+                if (!paths.isEmpty()) {
+                    final String selectedPath = FileUtil.toSystemIndependentName(paths.get(0).toString());
                     boolean valid = isValidSdkHome(selectedPath);
                     if (!valid) {
                         valid = isValidSdkHome(adjustSelectedSdkHome(selectedPath));
                         if (!valid) {
-                            LocalizeValue message = files[0].isDirectory()
+                            LocalizeValue message = Files.isDirectory(paths.get(0))
                                     ? ProjectLocalize.sdkConfigureHomeInvalidError(getDisplayName())
                                     : ProjectLocalize.sdkConfigureHomeFileInvalidError(getDisplayName());
                             throw new Exception(message.get());
